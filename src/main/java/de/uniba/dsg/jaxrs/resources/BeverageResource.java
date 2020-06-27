@@ -37,8 +37,10 @@ public class BeverageResource {
         final GenericEntity<List<BottleDTO>> entity = new GenericEntity<List<BottleDTO>>(BottleDTO.marshall(BeveageService.instance.getAllBottles() )){
         };
 
-        Response build = Response.ok(entity).build();
-        return build;
+
+        return Response.ok(entity).build();
 
     }
 }
+
+/////working
