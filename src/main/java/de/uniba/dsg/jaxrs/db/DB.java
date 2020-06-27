@@ -86,4 +86,18 @@ public class DB {
     public Bottle getBottle(final int id) {
         return this.bottles.stream().filter(c -> c.getId() == id).findFirst().orElse(null);
     }
+
+    public List<Crate> getAllCrates() {
+        return this.crates;
+    }
+
+    public void addCrateToDb(final Crate m) {
+        m.setId(this.crates.stream().map(Crate::getId).max(Comparator.naturalOrder()).orElse(0) + 1);
+        System.out.println(m);
+        this.crates.add(m);
+    }
+
+    public Crate getCrate(final int id) {
+        return this.crates.stream().filter(m -> m.getId() ==id).findFirst().orElse(null);
+    }
 }
