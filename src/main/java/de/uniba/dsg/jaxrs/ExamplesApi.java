@@ -1,6 +1,7 @@
 package de.uniba.dsg.jaxrs;
 
 import de.uniba.dsg.jaxrs.resources.BeverageResource;
+import de.uniba.dsg.jaxrs.resources.SwaggerUI;
 import de.uniba.dsg.jaxrs.resources.OrderResource;
 
 import javax.ws.rs.ApplicationPath;
@@ -21,6 +22,7 @@ public class ExamplesApi extends Application {
 
         resources.add(BeverageResource.class);
         resources.add(OrderResource.class);
+        resources.add(SwaggerUI.class);
         return resources;
     }
 }

@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlRootElement(name = "cat")
+@XmlRootElement(name = "bottle")
 @XmlType(propOrder = {"id", "name", "volume", "isAlcoholic", "volumePercent", "price","supplier","inStock"})
 public class BottleDTO {
     private int id;
