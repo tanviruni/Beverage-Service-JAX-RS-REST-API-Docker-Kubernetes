@@ -19,6 +19,10 @@ public class Crate implements Beverage{
         return id;
     }
 
+    public void setId(final int id) {
+        this.id = id;
+    }
+
     public Bottle getBottle() {
         return bottle;
     }

@@ -29,6 +29,20 @@ components:
         inStock:
           type: number
 
+    CrateDTO:
+      type: object
+      properties:
+        id:
+          type: number
+        bottle:
+          type: object
+        noOfBottles:
+          type: number
+        price:
+          type: number
+        inStock:
+          type: number
+
 paths:
 
   /beverage/bottles:
@@ -43,3 +57,16 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/bottleDTO"
+
+  /beverage/crates:
+    get:
+      summary: Get all crates (no pagination)
+      responses:
+        200:
+          description: Get all crates without pagination
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CrateDTO"
