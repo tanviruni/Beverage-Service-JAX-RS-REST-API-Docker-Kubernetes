@@ -4,6 +4,7 @@ import de.uniba.dsg.jaxrs.model.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 public class DB {
@@ -69,5 +70,16 @@ public class DB {
                         new OrderItem(10, this.bottles.get(2), 1)
                 )), 5.79, OrderStatus.SUBMITTED)
         ));
+    }
+
+
+    public List<Bottle> getAllBottles() {
+        return this.bottles;
+    }
+
+    public void addBottleToDb(final Bottle m) {
+        m.setId(this.bottles.stream().map(Bottle::getId).max(Comparator.naturalOrder()).orElse(0) + 1);
+        System.out.println(m);
+        this.bottles.add(m);
     }
 }

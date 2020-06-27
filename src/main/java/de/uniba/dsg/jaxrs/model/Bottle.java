@@ -10,6 +10,9 @@ public class Bottle implements Beverage{
     private double price;
     private String supplier;
     private int inStock;
+    public Bottle(){
+
+    }
 
     public Bottle(int id, String name, double volume, boolean isAlcoholic, double volumePercent, double price, String supplier, int inStock) {
         this.id = id;
@@ -24,6 +27,10 @@ public class Bottle implements Beverage{
 
     public int getId() {
         return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -95,4 +102,6 @@ public class Bottle implements Beverage{
                 ", inStock=" + inStock +
                 '}';
     }
+
+
 }
