@@ -82,4 +82,8 @@ public class DB {
         System.out.println(m);
         this.bottles.add(m);
     }
+
+    public Bottle getBottle(final int id) {
+        return this.bottles.stream().filter(c -> c.getId() == id).findFirst().orElse(null);
+    }
 }
