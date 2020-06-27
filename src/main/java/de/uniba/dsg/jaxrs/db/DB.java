@@ -82,4 +82,6 @@ public class DB {
         System.out.println(m);
         this.bottles.add(m);
     }
+
+    public List<Order> getAllOrders(){ return this.orders; }
 }
