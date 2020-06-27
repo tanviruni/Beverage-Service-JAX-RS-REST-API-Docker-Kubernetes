@@ -1,0 +1,11 @@
+# open api speicification document - header with version
+# document should be named openapi.yaml or openapi.json
+openapi: "3.0.4"
+# general information
+info:
+  title: Beveage Service
+  version: "1.0"
+  description: | # | for multi line description
+    tbd
+# resources (one of the REST principles)
+paths: {}
