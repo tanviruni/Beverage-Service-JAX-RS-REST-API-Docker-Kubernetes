@@ -7,6 +7,11 @@ import de.uniba.dsg.jaxrs.dto.BottleUpdateDTO;
 import de.uniba.dsg.jaxrs.dto.OrderDTO;
 import de.uniba.dsg.jaxrs.dto.OrderUpdateDTO;
 import de.uniba.dsg.jaxrs.model.*;
+import de.uniba.dsg.jaxrs.model.Bottle;
+import de.uniba.dsg.jaxrs.model.ErrorMessage;
+import de.uniba.dsg.jaxrs.model.ErrorType;
+import de.uniba.dsg.jaxrs.model.Order;
+import de.uniba.dsg.jaxrs.model.api.PaginatedOrders;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
@@ -22,11 +27,29 @@ public class OrderResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getOrders(){
         final GenericEntity<List<OrderDTO>> entity = new GenericEntity<List<OrderDTO>>(OrderDTO.marshall(OrderService.instance.getAllOrders() )){
+    public Response getOrders(@Context final UriInfo uriInfo,
+                              @QueryParam("pageLimit") @DefaultValue("10") final int pageLimit,
+                              @QueryParam("page") @DefaultValue("1") final int page) {
+        logger.info("Get all orders. Pagination parameter: page-\" + page + \" pageLimit-\" + pageLimit");
+
+        // Parameter validation
+        if (pageLimit < 1 || page < 1) {
+            final ErrorMessage errorMessage = new ErrorMessage(ErrorType.INVALID_PARAMETER, "PageLimit or page is less than 1. Read the documentation for a proper handling!");
+            return Response.status(Response.Status.BAD_REQUEST).entity(errorMessage).build();
+        }
+
+        final PaginationHelper<Order> helper = new PaginationHelper<>(OrderService.instance.getAllOrders());
+        final PaginatedOrders response = new PaginatedOrders(helper.getPagination(uriInfo, page, pageLimit), OrderDTO.marshall(helper.getPaginatedList()), uriInfo.getRequestUri());
+
+        return Response.ok(response).build();
+
+        /*final GenericEntity<List<OrderDTO>> entity = new GenericEntity<List<OrderDTO>>(OrderDTO.marshall(OrderService.instance.getAllOrders() )){
         };
 
         Response build = Response.ok(entity).build();
         //Response build = Response.ok(BeverageService.instance.getAllBottles()).build();
         return build;
+        return build;*/
     }
 
     @GET

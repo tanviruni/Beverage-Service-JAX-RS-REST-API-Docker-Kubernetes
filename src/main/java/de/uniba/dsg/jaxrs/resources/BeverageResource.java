@@ -11,7 +11,15 @@ import de.uniba.dsg.jaxrs.model.Bottle;
 import de.uniba.dsg.jaxrs.model.ErrorMessage;
 import de.uniba.dsg.jaxrs.model.ErrorType;
 import de.uniba.dsg.jaxrs.model.Crate;
+import de.uniba.dsg.jaxrs.model.Beverage;
+import de.uniba.dsg.jaxrs.model.Bottle;
+import de.uniba.dsg.jaxrs.model.ErrorMessage;
+import de.uniba.dsg.jaxrs.model.ErrorType;
+import de.uniba.dsg.jaxrs.model.Crate;
+import de.uniba.dsg.jaxrs.model.api.PaginatedBottles;
+import de.uniba.dsg.jaxrs.model.api.PaginatedCrates;
 
+/*import javax.annotation.processing.Generated;*/
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.net.URI;
@@ -25,6 +33,23 @@ public class BeverageResource {
     @GET
     @Path("{bottles}")
     @Produces({MediaType.APPLICATION_JSON})
+    public Response getBottles(@Context final UriInfo uriInfo,
+                               @QueryParam("pageLimit") @DefaultValue("10") final int pageLimit,
+                               @QueryParam("page") @DefaultValue("1") final int page) {
+        logger.info("Get all bottles. Pagination parameter: page-\" + page + \" pageLimit-\" + pageLimit");
+
+        // Parameter validation
+        if (pageLimit < 1 || page < 1) {
+            final ErrorMessage errorMessage = new ErrorMessage(ErrorType.INVALID_PARAMETER, "PageLimit or page is less than 1. Read the documentation for a proper handling!");
+            return Response.status(Response.Status.BAD_REQUEST).entity(errorMessage).build();
+        }
+
+        final PaginationHelper<Bottle> helper = new PaginationHelper<>(BeverageService.instance.getAllBottles());
+        final PaginatedBottles response = new PaginatedBottles(helper.getPagination(uriInfo, page, pageLimit), BottleDTO.marshall(helper.getPaginatedList(), uriInfo.getBaseUri()), uriInfo.getRequestUri());
+
+        return Response.ok(response).build();
+
+        /*final GenericEntity<List<BottleDTO>> entity = new GenericEntity<List<BottleDTO>>(BottleDTO.marshall(BeverageService.instance.getAllBottles() , uriInfo.getBaseUri())){
     public Response getBottles(@Context final UriInfo uriInfo) {
         logger.info("Get all bottles");
         final GenericEntity<List<BottleDTO>> entity = new GenericEntity<List<BottleDTO>>(BottleDTO.marshall(BeverageService.instance.getAllBottles() , uriInfo.getBaseUri())){
@@ -32,7 +57,7 @@ public class BeverageResource {
 
          Response build = Response.ok(entity).build();
         //Response build = Response.ok(BeverageService.instance.getAllBottles()).build();
-        return build;
+        return build;*/
     }
 
     @GET
@@ -50,6 +75,19 @@ public class BeverageResource {
         Response build = Response.ok(entity).build();
         //Response build = Response.ok(BeverageService.instance.getAllBottles()).build();
         return build;
+    }
+
+
+    @GET
+    @Path("{bottle}/{bottleId}")
+    public Response getBottleById( @PathParam("bottleId") final int bottleId, @Context final UriInfo uriInfo) {
+        logger.info("Get Movie with Id: " + bottleId);
+        final Bottle m = BeverageService.instance.getBottleById(bottleId);
+        if (m == null) {
+            logger.info("Movie not found: " + bottleId);
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        return Response.ok(new BottleDTO(m, uriInfo.getBaseUri())).build();
     }
 
 
@@ -87,6 +125,8 @@ public class BeverageResource {
 
         return Response.created(uri).build();
 
+        Response build = Response.ok(entity).build();
+        return build;
 
     }
 
@@ -112,14 +152,28 @@ public class BeverageResource {
     @GET
     @Path("crates")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getCrates(@Context final UriInfo uriInfo){
-        logger.info("Get all crates");
+    public Response getCrates(@Context final UriInfo uriInfo,
+                              @QueryParam("pageLimit") @DefaultValue("10") final int pageLimit,
+                              @QueryParam("page") @DefaultValue("1") final int page) {
+        logger.info("Get all crates. Pagination parameter: page-\" + page + \" pageLimit-\" + pageLimit");
 
-        final GenericEntity<List<CrateDTO>> entity = new GenericEntity<List<CrateDTO>>(CrateDTO.marshall(BeverageService.instance.getAllCrates(), uriInfo.getBaseUri())){
+        // Parameter validation
+        if (pageLimit < 1 || page < 1) {
+            final ErrorMessage errorMessage = new ErrorMessage(ErrorType.INVALID_PARAMETER, "PageLimit or page is less than 1. Read the documentation for a proper handling!");
+            return Response.status(Response.Status.BAD_REQUEST).entity(errorMessage).build();
+        }
+
+        final PaginationHelper<Crate> helper = new PaginationHelper<>(BeverageService.instance.getAllCrates());
+        final PaginatedCrates response = new PaginatedCrates(helper.getPagination(uriInfo, page, pageLimit), CrateDTO.marshall(helper.getPaginatedList(), uriInfo.getBaseUri()), uriInfo.getRequestUri());
+
+        return Response.ok(response).build();
+
+        /*final GenericEntity<List<CrateDTO>> entity = new GenericEntity<List<CrateDTO>>(CrateDTO.marshall(BeverageService.instance.getAllCrates(), uriInfo.getBaseUri())){
         };
 
         final Response build = Response.ok(entity).build();
-        return build;
+        return build;*/
+
     }
 
 
@@ -178,11 +232,11 @@ public class BeverageResource {
 
         return Response.ok().entity(new CrateDTO(resultCr,uriInfo.getBaseUri())).build();
 
-//        /*final GenericEntity<List<CrateDTO>> entity = new GenericEntity<List<CrateDTO>>(CrateDTO.marshall(BeverageService.instance.getAllCrates() )){
-//        };*/
-//
-//        Response build = Response.ok(entity).build();
-//        return build;
+        /*final GenericEntity<List<CrateDTO>> entity = new GenericEntity<List<CrateDTO>>(CrateDTO.marshall(BeverageService.instance.getAllCrates() )){
+        };
+
+        Response build = Response.ok(entity).build();
+        return build;*/
 
     }
 
