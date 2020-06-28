@@ -142,10 +142,22 @@ paths:
 
   /beverage/bottles:
     get:
-      summary: Get all bottles (no pagination)
+      summary: Get all bottles with pagination
+      parameters:
+        - name: page
+          required: true
+          in: query
+          schema:
+            type: number
+
+        - name: pageLimit
+          required: true
+          in: query
+          schema:
+            type: number
       responses:
         200:
-          description: Get all bottles without pagination
+          description: Get all bottles with pagination
           content:
             application/json:
               schema:
@@ -178,6 +190,10 @@ paths:
                 items:
                   $ref: "#/components/schemas/bottleDTO"
 
+
+
+
+
   /beverage/cratePriceByrange:
     get:
       summary: Get all crats by range
@@ -202,7 +218,66 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/CrateDTO"
+  /beverage/{bottle}/{bottleId}:
+    parameters:
+      - name: bottleId
+        # path parameters must be always mandatory!!
+        required: true
+        in: path
+        schema:
+          type: number
+    get:
+      summary: Get  bottle by Id
+      responses:
+        200:
+          description: Get  bottle by Id
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/bottleDTO"
 
+  /beverage/crates/{crateId}:
+    parameters:
+      - name: crateId
+        # path parameters must be always mandatory!!
+        required: true
+        in: path
+        schema:
+          type: number
+    get:
+      summary: Get  crate by Id
+      responses:
+        200:
+          description: Get  crate by Id
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CrateDTO"
+
+
+
+  /beverage/bottles/search:
+    get:
+      summary: Get  bottle by Name
+      parameters:
+        - name: name
+          required: true
+          in: query
+          schema:
+            type: string
+      responses:
+        200:
+          description: Get  bottle by Name
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/bottleDTO"
 
   /beverage/addBottle:
     post:
@@ -255,7 +330,19 @@ paths:
 
   /beverage/crates:
     get:
-      summary: Get all crates (no pagination)
+      summary: Get all crates with pagination
+      parameters:
+        - name: page
+          required: true
+          in: query
+          schema:
+            type: number
+
+        - name: pageLimit
+          required: true
+          in: query
+          schema:
+            type: number
       responses:
         200:
           description: Get all crates without pagination
@@ -318,10 +405,22 @@ paths:
           description: Not found
   /orders/orderList:
     get:
-      summary: Get all Orders (no pagination)
+      summary: Get all Orders with pagination
+      parameters:
+        - name: page
+          required: true
+          in: query
+          schema:
+            type: number
+
+        - name: pageLimit
+          required: true
+          in: query
+          schema:
+            type: number
       responses:
         200:
-          description: Get all Orders without pagination
+          description: Get all Orders with pagination
           content:
             application/json:
               schema:
@@ -329,7 +428,24 @@ paths:
                 items:
                   $ref: "#/components/schemas/OrderDTO"
 
-
+  /orders/getOrder:
+    get:
+      summary: Get  Order By Id
+      parameters:
+        - name: id
+          required: true
+          in: query
+          schema:
+            type: number
+      responses:
+        200:
+          description: Get  Order by id
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/OrderDTO"
 
   /orders/addOrder:
     post:
@@ -381,3 +497,38 @@ paths:
         404:
           description: Not found
 
+  /orders/process/{id}:
+    parameters:
+      - name: id
+        # path parameters must be always mandatory!!
+        required: true
+        in: path
+        schema:
+          type: number
+    get:
+      summary:   process order
+      responses:
+        200:
+          description: order processed
+          content:
+            text/plain:
+              schema:
+                type: string
+
+  /orders/cancelOrder/{id}:
+    parameters:
+      - name: id
+        # path parameters must be always mandatory!!
+        required: true
+        in: path
+        schema:
+          type: number
+    get:
+      summary: Cancel Order
+      responses:
+        200:
+          description: order canceled
+          content:
+            text/plain:
+              schema:
+                type: string

@@ -115,6 +115,7 @@ public class OrderResource {
 
             @GET
             @Path("process/{id}")
+            @Produces({MediaType.TEXT_PLAIN})
             public Response processOrder(@PathParam("id") final int id) {
                 //logger.info("Updating order " + updatedOrder);
 
@@ -133,6 +134,7 @@ public class OrderResource {
 
             @GET
             @Path("cancelOrder/{id}")
+            @Produces({MediaType.TEXT_PLAIN})
             public Response cancelOrder(@PathParam("id") final int id) {
                 final Order ord = OrderService.instance.getOrder(id);
 
