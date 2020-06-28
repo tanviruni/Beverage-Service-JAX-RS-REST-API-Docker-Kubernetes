@@ -30,6 +30,8 @@ components:
           type: string
         inStock:
           type: number
+        href:
+          type: string
     bottleUpdateDTO:
       type: object
       required:

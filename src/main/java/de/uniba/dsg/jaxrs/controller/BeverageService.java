@@ -6,13 +6,13 @@ import de.uniba.dsg.jaxrs.model.Bottle;
 import java.util.List;
 import java.util.Optional;
 
-public class BeveageService {
+public class BeverageService {
 
-    public static final BeveageService instance = new BeveageService();
+    public static final BeverageService instance = new BeverageService();
 
     private final DB db;
 
-    public BeveageService() {
+    public BeverageService() {
         this.db = new DB();
     }
 

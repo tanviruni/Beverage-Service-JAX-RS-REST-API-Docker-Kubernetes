@@ -1,7 +1,7 @@
 package de.uniba.dsg.jaxrs.resources;
 
 
-import de.uniba.dsg.jaxrs.controller.BeveageService;
+import de.uniba.dsg.jaxrs.controller.BeverageService;
 import de.uniba.dsg.jaxrs.dto.BottleDTO;
 import de.uniba.dsg.jaxrs.dto.BottleUpdateDTO;
 import de.uniba.dsg.jaxrs.model.Bottle;
@@ -11,7 +11,6 @@ import de.uniba.dsg.jaxrs.model.ErrorType;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.net.URI;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.logging.Logger;
 @Path("beverage")
@@ -22,9 +21,9 @@ public class BeverageResource {
     @GET
     @Path("{bottles}")
     @Produces({MediaType.APPLICATION_JSON})
-    public Response getBottles() {
+    public Response getBottles(@Context final UriInfo uriInfo) {
         logger.info("Get all bottles");
-        final GenericEntity<List<BottleDTO>> entity = new GenericEntity<List<BottleDTO>>(BottleDTO.marshall(BeveageService.instance.getAllBottles() )){
+        final GenericEntity<List<BottleDTO>> entity = new GenericEntity<List<BottleDTO>>(BottleDTO.marshall(BeverageService.instance.getAllBottles() , uriInfo.getBaseUri())){
         };
 
          Response build = Response.ok(entity).build();
@@ -34,14 +33,14 @@ public class BeverageResource {
 
     @GET
     @Path("{bottle}/{bottleId}")
-    public Response getBottleById( @PathParam("bottleId") final int bottleId) {
+    public Response getBottleById( @PathParam("bottleId") final int bottleId, @Context final UriInfo uriInfo) {
         logger.info("Get Movie with Id: " + bottleId);
-        final Bottle m = BeveageService.instance.getBottleById(bottleId);
+        final Bottle m = BeverageService.instance.getBottleById(bottleId);
         if (m == null) {
             logger.info("Movie not found: " + bottleId);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
-        return Response.ok(new BottleDTO(m)).build();
+        return Response.ok(new BottleDTO(m, uriInfo.getBaseUri())).build();
     }
 
 
@@ -57,7 +56,7 @@ public class BeverageResource {
 
         final Bottle newBottle = bottleDTO.unmarshall();
         // generate id and other stuff
-        final Bottle btl = BeveageService.instance.addBottle(newBottle);
+        final Bottle btl = BeverageService.instance.addBottle(newBottle);
         URI uri = UriBuilder.fromUri(uriInfo.getBaseUri()).path(BeverageResource.class).path(BeverageResource.class, "getBottleById").build("bottle?bottleId=",btl.getId());
         logger.info("created uri - "+uri.getPath());
 
@@ -69,21 +68,21 @@ public class BeverageResource {
 
     @PUT
     @Path("{editBottle}/{bottle-id}")
-    public Response editBottle(@PathParam("bottle-id") final int id, final BottleUpdateDTO updatedBottle) {
+    public Response editBottle(@PathParam("bottle-id") final int id, final BottleUpdateDTO updatedBottle, @Context final UriInfo uriInfo) {
         logger.info("Update bottle " + updatedBottle);
         if (updatedBottle == null) {
             return Response.status(Response.Status.BAD_REQUEST).entity(new ErrorMessage(ErrorType.INVALID_PARAMETER, "Body was empty")).build();
         }
 
-        final Bottle bl = BeveageService.instance.getBottle(id);
+        final Bottle bl = BeverageService.instance.getBottle(id);
 
         if (bl == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
-        final Bottle resultbl = BeveageService.instance.updateBottle(id, updatedBottle.unmarshall());
+        final Bottle resultbl = BeverageService.instance.updateBottle(id, updatedBottle.unmarshall());
 
-        return Response.ok().entity(new BottleDTO(resultbl)).build();
+        return Response.ok().entity(new BottleDTO(resultbl,uriInfo.getBaseUri())).build();
     }
 
 
