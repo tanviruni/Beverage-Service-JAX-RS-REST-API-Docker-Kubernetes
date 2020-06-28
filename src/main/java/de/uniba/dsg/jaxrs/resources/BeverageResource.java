@@ -6,16 +6,18 @@ import de.uniba.dsg.jaxrs.dto.BottleDTO;
 import de.uniba.dsg.jaxrs.dto.BottleUpdateDTO;
 import de.uniba.dsg.jaxrs.dto.CrateDTO;
 import de.uniba.dsg.jaxrs.dto.CrateUpdateDTO;
-import de.uniba.dsg.jaxrs.model.Beverage;
-import de.uniba.dsg.jaxrs.model.Bottle;
-import de.uniba.dsg.jaxrs.model.Crate;
+import de.uniba.dsg.jaxrs.model.*;
 
+/*import javax.annotation.processing.Generated;*/
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
+import java.net.URI;
 import java.util.List;
-
+import java.util.logging.Logger;
 @Path("beverage")
 public class BeverageResource {
+
+    private static final Logger logger = Logger.getLogger("BeverageResource");
 
     @GET
     @Path("{bottles}")
@@ -70,33 +72,61 @@ public class BeverageResource {
     @GET
     @Path("crates")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getCrates() {
+    public Response getCrates(@Context final UriInfo uriInfo){
+        logger.info("Get all crates");
 
-        final GenericEntity<List<CrateDTO>> entity = new GenericEntity<List<CrateDTO>>(CrateDTO.marshall(BeverageService.instance.getAllCrates())) {
+        final GenericEntity<List<CrateDTO>> entity = new GenericEntity<List<CrateDTO>>(CrateDTO.marshall(BeverageService.instance.getAllCrates(), uriInfo.getBaseUri())){
         };
 
-        Response build = Response.ok(entity).build();
+        final Response build = Response.ok(entity).build();
         return build;
     }
 
+
+    @GET
+    @Path("crates/{crateId}")
+    public Response getCrateById(@PathParam("crateId") final int crateId, @Context final UriInfo uriInfo) {
+        logger.info("Get Crate with Id: " + crateId);
+        final Crate m = BeverageService.instance.getCrateById(crateId);
+        if (m == null){
+            logger.info("Crate not found" + crateId );
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        return Response.ok(new CrateDTO(m, uriInfo.getBaseUri())).build();
+    }
+
     @POST
-    @Path("crates")
+    @Path("addCrates")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response createCrate(final CrateDTO crateDTO) {
+    public Response createCrate(final CrateDTO crateDTO, @Context final UriInfo uriInfo) {
+        logger.info("Create a crate in DB: " + crateDTO);
+
+        if(crateDTO == null){
+            return Response.status(Response.Status.BAD_REQUEST).entity(new ErrorMessage(ErrorType.INVALID_PARAMETER, "Crate Body was empty")).build();
+        }
+
         final Crate newCrate = crateDTO.unmarshall();
 
-        final Crate create = BeverageService.instance.addCrate(newCrate);
+        final Crate crate = BeverageService.instance.addCrate(newCrate);
+        URI uri = UriBuilder.fromUri(uriInfo.getBaseUri()).path(BeverageResource.class).path(BeverageResource.class, "getCrateById").build(crate.getId());
+        logger.info("created uri for crate - " +uri.getPath());
 
-        final GenericEntity<List<CrateDTO>> entity = new GenericEntity<List<CrateDTO>>(CrateDTO.marshall(BeverageService.instance.getAllCrates())) {
+        return Response.created(uri).build();
+
+        /*final GenericEntity<List<CrateDTO>> entity = new GenericEntity<List<CrateDTO>>(CrateDTO.marshall(BeverageService.instance.getAllCrates())) {
         };
 
         Response build = Response.ok(entity).build();
-        return build;
+        return build;*/
     }
 
     @PUT
     @Path("editCrate/{crate-id}")
-    public Response editCrate(@PathParam("crate-id") final int id, final CrateUpdateDTO updatedCrate) {
+    public Response editCrate(@PathParam("crate-id") final int id, final CrateUpdateDTO updatedCrate, @Context final UriInfo uriInfo) {
+        logger.info("Update crate " + updatedCrate);
+        if(updatedCrate == null){
+            return Response.status(Response.Status.BAD_REQUEST).entity(new ErrorMessage(ErrorType.INVALID_PARAMETER, "Crate body was empty")).build();
+        }
 
         final Crate cr = BeverageService.instance.getCrate(id);
 
@@ -106,11 +136,13 @@ public class BeverageResource {
 
         final Crate resultCr = BeverageService.instance.updateCrate(id, updatedCrate.unmarshall());
 
-        final GenericEntity<List<CrateDTO>> entity = new GenericEntity<List<CrateDTO>>(CrateDTO.marshall(BeverageService.instance.getAllCrates() )){
+        return Response.ok().entity(new CrateDTO(resultCr,uriInfo.getBaseUri())).build();
+
+        /*final GenericEntity<List<CrateDTO>> entity = new GenericEntity<List<CrateDTO>>(CrateDTO.marshall(BeverageService.instance.getAllCrates() )){
         };
 
         Response build = Response.ok(entity).build();
-        return build;
+        return build;*/
 
     }
 

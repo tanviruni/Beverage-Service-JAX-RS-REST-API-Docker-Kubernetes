@@ -100,4 +100,8 @@ public class DB {
     public Crate getCrate(final int id) {
         return this.crates.stream().filter(m -> m.getId() ==id).findFirst().orElse(null);
     }
+
+    public Crate getCrateById(final int crateId) {
+        return this.crates.stream().filter(m -> m.getId() == crateId).findFirst().orElse(null);
+    }
 }
