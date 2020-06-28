@@ -70,6 +70,10 @@ public class BeverageResource {
     @PUT
     @Path("{editBottle}/{bottle-id}")
     public Response editBottle(@PathParam("bottle-id") final int id, final BottleUpdateDTO updatedBottle) {
+        logger.info("Update bottle " + updatedBottle);
+        if (updatedBottle == null) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(new ErrorMessage(ErrorType.INVALID_PARAMETER, "Body was empty")).build();
+        }
 
         final Bottle bl = BeveageService.instance.getBottle(id);
 
@@ -79,11 +83,7 @@ public class BeverageResource {
 
         final Bottle resultbl = BeveageService.instance.updateBottle(id, updatedBottle.unmarshall());
 
-        final GenericEntity<List<BottleDTO>> entity = new GenericEntity<List<BottleDTO>>(BottleDTO.marshall(BeveageService.instance.getAllBottles() )){
-        };
-
-        Response build = Response.ok(entity).build();
-        return build;
+        return Response.ok().entity(new BottleDTO(resultbl)).build();
     }
 
 

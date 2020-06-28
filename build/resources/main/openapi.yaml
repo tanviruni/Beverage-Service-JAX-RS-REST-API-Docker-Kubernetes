@@ -18,6 +18,27 @@ components:
           type: number
         name:
           type: string
+        volumn:
+          type: number
+        isAlcoholic:
+          type: boolean
+        volumePercent:
+          type: number
+        price:
+          type: number
+        supplier:
+          type: string
+        inStock:
+          type: number
+    bottleUpdateDTO:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+        volumn:
+          type: number
         isAlcoholic:
           type: boolean
         volumePercent:
@@ -73,3 +94,34 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/errorMessage"
+  /beverage/bottle/{bottleId}:
+    parameters:
+      - name: bottleId
+        # path parameters must be always mandatory!!
+        required: true
+        in: path
+        schema:
+          type: number
+    put:
+      summary: Update specific bottle
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/bottleUpdateDTO"
+      responses:
+        200:
+          description: Updating a bottle
+          content:
+            application/*:
+              # response schema
+              schema:
+                $ref: "#/components/schemas/bottleDTO"
+        400:
+          description: Message body was empty
+          content:
+            application/*:
+              schema:
+                $ref: "#/components/schemas/errorMessage"
+        404:
+          description: Not found
