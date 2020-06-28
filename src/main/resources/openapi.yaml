@@ -105,23 +105,38 @@ components:
           type: number
         quantity:
           type: number
-        beverageType:
+        type:
           $ref: "#/components/schemas/beverageType"
         beverageId:
           type: number
         price:
           type: number
+        href:
+          type: string
 
     OrderDTO:
       type: object
       properties:
+        id:
+          type: number
         price:
           type: number
-        position:
+        status:
+          $ref: "#/components/schemas/status"
+        positions:
           type: array
           items:
             $ref: "#/components/schemas/OrderItemDTO"
 
+    orderUpdateDTO:
+      type: object
+      properties:
+        status:
+          $ref: "#/components/schemas/status"
+        positions:
+          type: array
+          items:
+            $ref: "#/components/schemas/OrderItemDTO"
 
 paths:
 
@@ -138,18 +153,6 @@ paths:
                 items:
                   $ref: "#/components/schemas/bottleDTO"
 
-  /beverage/crates:
-    get:
-      summary: Get all crates (no pagination)
-      responses:
-        200:
-          description: Get all crates without pagination
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/CrateDTO"
 
   /beverage/addBottle:
     post:
@@ -199,6 +202,19 @@ paths:
                 $ref: "#/components/schemas/errorMessage"
         404:
           description: Not found
+
+  /beverage/crates:
+    get:
+      summary: Get all crates (no pagination)
+      responses:
+        200:
+          description: Get all crates without pagination
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CrateDTO"
   /beverage/addCrates:
     post:
       summary: Add a crate
@@ -250,6 +266,66 @@ paths:
                 $ref: '#/components/schemas/errorMessage'
         '404':
           description: Not found
+  /orders/orderList:
+    get:
+      summary: Get all Orders (no pagination)
+      responses:
+        200:
+          description: Get all Orders without pagination
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/OrderDTO"
 
+  /orders/addOrder:
+    post:
+      summary: Create a order
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrderDTO"
+      responses:
+        201:
+          description: Order created
+        400:
+          description: Message body was empty
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/errorMessage"
 
+  /orders/editOrder/{id}:
+    parameters:
+      - name: id
+        # path parameters must be always mandatory!!
+        required: true
+        in: path
+        schema:
+          type: number
+    put:
+      summary: Update specific order
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/orderUpdateDTO"
+      responses:
+        200:
+          description: Updating a order
+          content:
+            application/*:
+              # response schema
+              schema:
+                $ref: "#/components/schemas/OrderDTO"
+        400:
+          description: Message body was empty
+          content:
+            application/*:
+              schema:
+                $ref: "#/components/schemas/errorMessage"
+        404:
+          description: Not found
 

@@ -22,6 +22,7 @@ public class OrderResource {
     private static final Logger logger = Logger.getLogger("OrderResource");
 
     @GET
+    @Path("orderList")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getOrders(){
         final GenericEntity<List<OrderDTO>> entity = new GenericEntity<List<OrderDTO>>(OrderDTO.marshall(OrderService.instance.getAllOrders() )){
@@ -42,6 +43,7 @@ public class OrderResource {
     }
 
     @POST
+    @Path("addOrder")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createOrder(final OrderDTO orderDTO){
         if (orderDTO == null) {
