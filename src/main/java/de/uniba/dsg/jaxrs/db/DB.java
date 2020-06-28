@@ -87,6 +87,7 @@ public class DB {
 
     public void addOrder(final Order order) {
         order.setOrderId(this.orders.stream().map(Order::getOrderId).max(Comparator.naturalOrder()).orElse(0) + 1);
+        order.setPrice();
         order.setStatus(OrderStatus.SUBMITTED);
         System.out.println(order);
         this.orders.add(order);
