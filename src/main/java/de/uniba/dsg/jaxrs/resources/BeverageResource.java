@@ -15,6 +15,9 @@ import de.uniba.dsg.jaxrs.model.Crate;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
 @Path("beverage")
@@ -31,6 +34,48 @@ public class BeverageResource {
         };
 
          Response build = Response.ok(entity).build();
+        //Response build = Response.ok(BeverageService.instance.getAllBottles()).build();
+        return build;
+    }
+
+    @GET
+    @Path("bottlePriceByrange")
+    public Response bottlePriceByrange( @QueryParam("minValue") final double min,@QueryParam("maxValue") final double max, @Context final UriInfo uriInfo) {
+        logger.info("Get all bottles in range");
+
+        List<Bottle> bt = BeverageService.instance.getAllBottles();
+        List<Bottle> ct = new ArrayList<Bottle>();
+        for(Bottle it : bt){
+            if(it.getPrice() > min && it.getPrice() < max)
+            {
+                ct.add(it);
+            }
+        }
+        final GenericEntity<List<BottleDTO>> entity = new GenericEntity<List<BottleDTO>>(BottleDTO.marshall(ct , uriInfo.getBaseUri())){
+        };
+
+        Response build = Response.ok(entity).build();
+        //Response build = Response.ok(BeverageService.instance.getAllBottles()).build();
+        return build;
+    }
+
+    @GET
+    @Path("cratePriceByrange")
+    public Response cratePriceByrange( @QueryParam("minValue") final double min,@QueryParam("maxValue") final double max, @Context final UriInfo uriInfo) {
+        logger.info("Get all crates in range");
+
+        List<Crate> bt = BeverageService.instance.getAllCrates();
+        List<Crate> ct = new ArrayList<Crate>();
+        for(Crate it : bt){
+            if(it.getPrice() > min && it.getPrice() < max)
+            {
+                ct.add(it);
+            }
+        }
+        final GenericEntity<List<CrateDTO>> entity = new GenericEntity<List<CrateDTO>>(CrateDTO.marshall(ct , uriInfo.getBaseUri())){
+        };
+
+        Response build = Response.ok(entity).build();
         //Response build = Response.ok(BeverageService.instance.getAllBottles()).build();
         return build;
     }
@@ -102,6 +147,7 @@ public class BeverageResource {
         final Response build = Response.ok(entity).build();
         return build;
     }
+
 
 
     @GET

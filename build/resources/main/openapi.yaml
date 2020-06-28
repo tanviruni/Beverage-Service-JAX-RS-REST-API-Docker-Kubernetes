@@ -153,6 +153,55 @@ paths:
                 items:
                   $ref: "#/components/schemas/bottleDTO"
 
+  /beverage/bottlePriceByrange:
+    get:
+      summary: Get all bottles by range
+      parameters:
+        - name: minValue
+          required: true
+          in: query
+          schema:
+            type: number
+
+        - name: maxValue
+          required: true
+          in: query
+          schema:
+            type: number
+      responses:
+        200:
+          description: Get all bottles by range
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/bottleDTO"
+
+  /beverage/cratePriceByrange:
+    get:
+      summary: Get all crats by range
+      parameters:
+        - name: minValue
+          required: true
+          in: query
+          schema:
+            type: number
+
+        - name: maxValue
+          required: true
+          in: query
+          schema:
+            type: number
+      responses:
+        200:
+          description: Get all crats by range
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CrateDTO"
 
   /beverage/addBottle:
     post:
