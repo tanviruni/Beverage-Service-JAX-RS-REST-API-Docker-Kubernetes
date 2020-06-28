@@ -35,6 +35,25 @@ public class BeverageResource {
         return build;
     }
 
+    @GET
+    @Path("bottles/search")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response getBottles(@QueryParam("name") final String name, @Context final UriInfo uriInfo) {
+        logger.info("Searching bottles with name - "+name);
+        Bottle bt = BeverageService.instance.getBottle(name);
+        if(bt == null)
+            return Response.status(Response.Status.NOT_FOUND).entity("Not Found").build();
+        BottleDTO dto = new BottleDTO(bt, uriInfo.getBaseUri());
+        final GenericEntity<BottleDTO> entity = new GenericEntity<BottleDTO>(dto){
+        };
+
+        Response build = Response.ok(entity).build();
+        //Response build = Response.ok(BeverageService.instance.getAllBottles()).build();
+        return build;
+    }
+
+
+
 
     @GET
     @Path("{bottle}/{bottleId}")

@@ -15,7 +15,7 @@ public class BeverageService {
     private final DB db;
 
     public BeverageService() {
-        this.db = new DB();
+        this.db = DB.db;
     }
 
     public List<Bottle> getAllBottles() {
@@ -34,6 +34,10 @@ public class BeverageService {
 
     public Bottle getBottle(final int id) {
         return this.db.getBottle(id);
+    }
+
+    public Bottle getBottle(final String name){
+        return  this.db.getBottle(name);
     }
 
     public Bottle updateBottle(final int id, final Bottle updatedBottle) {

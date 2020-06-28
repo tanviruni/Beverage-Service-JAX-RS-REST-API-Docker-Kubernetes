@@ -16,6 +16,11 @@ public class ErrorMessage{
         this.message = message;
     }
 
+    public ErrorMessage(final ErrorType errorType){
+        this.errorType = errorType;
+        this.message = errorType.getMessage();
+    }
+
     public ErrorType getErrorType() {
         return this.errorType;
     }

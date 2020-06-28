@@ -8,6 +8,7 @@ import java.util.Comparator;
 import java.util.List;
 
 public class DB {
+    public static final DB db = new DB();
 
     private final List<Bottle> bottles;
     private final List<Crate> crates;
@@ -83,6 +84,13 @@ public class DB {
         this.bottles.add(m);
     }
 
+    public Bottle getBottle(String name){
+        for(Bottle b: this.bottles)
+            if(b.getName().equalsIgnoreCase(name))
+                return b;
+        return null;
+    }
+
     public List<Order> getAllOrders(){ return this.orders; }
 
     /***
@@ -91,7 +99,7 @@ public class DB {
      *      2502        - insufficient stock
      *      2505        - successfully inserted
      ***/
-    public int addOrder(final Order order) {
+    public ErrorType addOrder(final Order order) {
         order.setOrderId(this.orders.stream().map(Order::getOrderId).max(Comparator.naturalOrder()).orElse(0) + 1);
         order.setPrice();
         order.setStatus(OrderStatus.SUBMITTED);
@@ -103,29 +111,63 @@ public class DB {
         for(OrderItem item: order.getPositions()){
             if(item.getBeverage().getClass()==Bottle.class){
                 if(this.getBottle(item.getBeverage().getId())==null)
-                    return 2501;  //beverage not found
+                    return ErrorType.ITEM_NOT_FOUND;  //beverage not found
                 if(this.getBottle(item.getBeverage().getId()).getInStock() < item.getQuantity())
-                    return 2502; //insufficient stock
+                    return ErrorType.INSUFFICIENT_STOCK; //insufficient stock
             }
             else {
                 if(this.getCrate(item.getBeverage().getId())==null)
-                    return 2501;  //beverage not found
+                    return ErrorType.ITEM_NOT_FOUND;  //beverage not found
                 if(this.getCrate(item.getBeverage().getId()).getInStock() < item.getQuantity())
-                    return 2502; //insufficient stock
+                    return ErrorType.INSUFFICIENT_STOCK; //insufficient stock
             }
         }
 
 
 
         this.orders.add(order);
-        return 2505;
+        this.adjustStock(order, 1);
+
+        return ErrorType.INSERT_SUCCESSFUL;
     }
 
+    private void adjustStock(Order order, int action){
+        for(OrderItem item: order.getPositions()){
+            if(item.getBeverage().getType()==BeverageType.BOTTLE_TYPE){
+                Bottle b = this.getBottle(item.getBeverage().getId());
+                int prev = b.getInStock();
+                if(action==1)
+                    b.setInStock(prev-item.getQuantity());
+                else
+                    b.setInStock(prev+item.getQuantity());
+            }
+            else{
+                Crate c = this.getCrate(item.getBeverage().getId());
+                int prev = c.getInStock();
+                if(action==1)
+                    c.setInStock(prev-item.getQuantity());
+                else
+                    c.setInStock(prev+item.getQuantity());
+            }
+
+        }
+    }
+
+    public void updateStock(Order oldOrder, Order newOrder){
+        this.adjustStock(oldOrder, 0);
+        this.adjustStock(newOrder, 1);
+
+    }
     public Order getOrder(final int id) {
         for(Order order: this.orders)
             if(order.getOrderId() == id)
                 return order;
         return null;
+    }
+
+    public void deleteOrder(final int id){
+        Order order = this.getOrder(id);
+        this.orders.remove(order);
     }
 
     public Bottle getBottle(final int id) {

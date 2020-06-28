@@ -1,8 +1,8 @@
 package de.uniba.dsg.jaxrs.controller;
 
 import de.uniba.dsg.jaxrs.db.DB;
-import de.uniba.dsg.jaxrs.model.Bottle;
-import de.uniba.dsg.jaxrs.model.Order;
+import de.uniba.dsg.jaxrs.model.*;
+import org.graalvm.compiler.core.common.type.ArithmeticOpTable;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,16 +13,16 @@ public class OrderService {
     private final DB db;
 
     public OrderService() {
-        this.db = new DB();
+        this.db = DB.db;
     }
 
     public List<Order> getAllOrders() {
         return this.db.getAllOrders();
     }
 
-    public int addOrder(final Order newOrder) {
+    public ErrorType addOrder(final Order newOrder) {
         if (newOrder == null) {
-            return 2510;
+            return ErrorType.INVALID_PARAMETER;
         }
 
         return this.db.addOrder(newOrder);
@@ -45,6 +45,7 @@ public class OrderService {
 
         //if every update is valid
         if(true){
+            this.db.updateStock(order, updatedOrder);
             Optional.ofNullable(updatedOrder.getPositions()).ifPresent(d -> order.setPositions(d));
             System.out.println("updated");
         }
@@ -52,5 +53,18 @@ public class OrderService {
         return order;
     }
 
+    public void processOrder(final int id){
+        final Order order = this.getOrder(id);
+        if(order != null){
+            order.setStatus(OrderStatus.PROCESSED);
+        }
+    }
+
+    public void cancelOrder(final int id){
+        final Order order = this.getOrder(id);
+        if(order !=null){
+            this.db.deleteOrder(id);
+        }
+    }
 
 }
