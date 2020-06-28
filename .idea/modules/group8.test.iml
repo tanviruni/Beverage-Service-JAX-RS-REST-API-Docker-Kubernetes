@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module version="4">
-  <component name="ExternalSystem" externalSystem="GRADLE" externalSystemModuleGroup="" externalSystemModuleType="sourceSet" externalSystemModuleVersion="unspecified" linkedProjectId="group8:test" linkedProjectPath="$MODULE_DIR$/../.." rootProjectPath="$MODULE_DIR$/../.." />
   <component name="NewModuleRootManager">
     <output-test url="file://$MODULE_DIR$/../../build/classes/java/test" />
     <exclude-output />
@@ -42,5 +41,4 @@
     <orderEntry type="library" name="Gradle: org.glassfish.hk2.external:aopalliance-repackaged:2.6.1" level="project" />
     <orderEntry type="library" name="Gradle: org.eclipse.persistence:org.eclipse.persistence.asm:2.7.6" level="project" />
   </component>
-  <component name="TestModuleProperties" production-module="group8.main" />
 </module>
