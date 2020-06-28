@@ -6,6 +6,8 @@ public class OrderItem {
     private Beverage beverage;
     private int quantity;
 
+//    public OrderItem() {}
+
     public OrderItem(int number, Beverage beverage, int quantity) {
         this.number = number;
         this.beverage = beverage;

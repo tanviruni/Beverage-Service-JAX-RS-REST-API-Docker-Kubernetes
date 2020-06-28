@@ -1,5 +1,7 @@
 package de.uniba.dsg.jaxrs.model;
 
+import java.net.URI;
+
 public class Bottle implements Beverage{
 
     private int id;
@@ -10,6 +12,9 @@ public class Bottle implements Beverage{
     private double price;
     private String supplier;
     private int inStock;
+    public Bottle(){
+
+    }
 
     public Bottle(int id, String name, double volume, boolean isAlcoholic, double volumePercent, double price, String supplier, int inStock) {
         this.id = id;
@@ -22,8 +27,13 @@ public class Bottle implements Beverage{
         this.inStock = inStock;
     }
 
+    @Override
     public int getId() {
         return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -58,6 +68,7 @@ public class Bottle implements Beverage{
         this.volumePercent = volumePercent;
     }
 
+    @Override
     public double getPrice() {
         return price;
     }
@@ -83,6 +94,16 @@ public class Bottle implements Beverage{
     }
 
     @Override
+    public BeverageType getType() {
+        return BeverageType.BOTTLE_TYPE;
+    }
+
+    @Override
+    public URI getHref() {
+        return null;
+    }
+
+    @Override
     public String toString() {
         return "Bottle{" +
                 "id=" + id +
@@ -95,4 +116,6 @@ public class Bottle implements Beverage{
                 ", inStock=" + inStock +
                 '}';
     }
+
+
 }

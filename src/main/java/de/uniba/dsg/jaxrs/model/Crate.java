@@ -1,5 +1,7 @@
 package de.uniba.dsg.jaxrs.model;
 
+import java.net.URI;
+
 public class Crate implements Beverage{
     private int id;
     private Bottle bottle;
@@ -15,8 +17,13 @@ public class Crate implements Beverage{
         this.inStock = inStock;
     }
 
+    @Override
     public int getId() {
         return id;
+    }
+
+    public void setId(final int id) {
+        this.id = id;
     }
 
     public Bottle getBottle() {
@@ -35,6 +42,7 @@ public class Crate implements Beverage{
         this.noOfBottles = noOfBottles;
     }
 
+    @Override
     public double getPrice() {
         return price;
     }
@@ -49,6 +57,17 @@ public class Crate implements Beverage{
 
     public void setInStock(int inStock) {
         this.inStock = inStock;
+    }
+
+
+    @Override
+    public BeverageType getType() {
+        return BeverageType.CRATE_TYPE;
+    }
+
+    @Override
+    public URI getHref() {
+        return null;
     }
 
     @Override
