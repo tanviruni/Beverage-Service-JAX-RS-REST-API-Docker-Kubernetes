@@ -25,6 +25,7 @@ public class OrderResource {
     @Path("orderList")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getOrders(){
+        logger.info("Get all orders");
         final GenericEntity<List<OrderDTO>> entity = new GenericEntity<List<OrderDTO>>(OrderDTO.marshall(OrderService.instance.getAllOrders() )){
         };
 
@@ -37,6 +38,7 @@ public class OrderResource {
     @Path("getOrder")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getOrder(@QueryParam("id") final int id){
+        logger.info("Get Bottle By Id " + id);
         final GenericEntity<OrderDTO> entity = new GenericEntity<OrderDTO>(new OrderDTO(OrderService.instance.getOrder(id))){};
         System.out.println();
         return Response.ok(entity).build();
@@ -51,7 +53,7 @@ public class OrderResource {
             //return Response.status(Response.Status.BAD_REQUEST).entity(new ErrorMessage(ErrorType.INVALID_PARAMETER, "Body was empty")).build();
         }
         final Order newOrder = orderDTO.unmarshall();
-
+        logger.info("Making a new order");
         int res = OrderService.instance.addOrder(newOrder);
 
         //String
