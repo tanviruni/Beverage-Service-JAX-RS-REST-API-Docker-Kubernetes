@@ -78,6 +78,7 @@ public class DB {
         return this.bottles;
     }
 
+
     public void addBottleToDb(final Bottle m) {
         m.setId(this.bottles.stream().map(Bottle::getId).max(Comparator.naturalOrder()).orElse(0) + 1);
         System.out.println(m);

@@ -24,6 +24,7 @@ public class OrderResource {
     private static final Logger logger = Logger.getLogger("OrderResource");
 
     @GET
+    @Path("orderList")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getOrders(@Context final UriInfo uriInfo,
                               @QueryParam("pageLimit") @DefaultValue("10") final int pageLimit,
@@ -41,12 +42,7 @@ public class OrderResource {
 
         return Response.ok(response).build();
 
-        /*final GenericEntity<List<OrderDTO>> entity = new GenericEntity<List<OrderDTO>>(OrderDTO.marshall(OrderService.instance.getAllOrders() )){
-        };
 
-        Response build = Response.ok(entity).build();
-        //Response build = Response.ok(BeverageService.instance.getAllBottles()).build();
-        return build;*/
     }
 
     @GET

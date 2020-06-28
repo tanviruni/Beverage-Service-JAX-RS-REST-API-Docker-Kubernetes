@@ -15,11 +15,17 @@ public class BottleDTO {
     private int id;
     @XmlElement(required = true)
     private String name;
+    @XmlElement(required = true)
     private double volume;
+    @XmlElement(required = true)
     private boolean isAlcoholic;
+    @XmlElement(required = true)
     private double volumePercent;
+    @XmlElement(required = true)
     private double price;
+    @XmlElement(required = true)
     private String supplier;
+    @XmlElement(required = true)
     private int inStock;
     private URI href;
 
