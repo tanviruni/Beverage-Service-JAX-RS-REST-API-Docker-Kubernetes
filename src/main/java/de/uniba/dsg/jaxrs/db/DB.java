@@ -85,12 +85,40 @@ public class DB {
 
     public List<Order> getAllOrders(){ return this.orders; }
 
-    public void addOrder(final Order order) {
+    /***
+     * return codes:
+     *      2501        - invalid parameters. beverage not found
+     *      2502        - insufficient stock
+     *      2505        - successfully inserted
+     ***/
+    public int addOrder(final Order order) {
         order.setOrderId(this.orders.stream().map(Order::getOrderId).max(Comparator.naturalOrder()).orElse(0) + 1);
         order.setPrice();
         order.setStatus(OrderStatus.SUBMITTED);
-        System.out.println(order);
+
+        /**
+         * stock validation
+         */
+        int returnVal = 0;
+        for(OrderItem item: order.getPositions()){
+            if(item.getBeverage().getClass()==Bottle.class){
+                if(this.getBottle(item.getBeverage().getId())==null)
+                    return 2501;  //beverage not found
+                if(this.getBottle(item.getBeverage().getId()).getInStock() < item.getQuantity())
+                    return 2502; //insufficient stock
+            }
+            else {
+                if(this.getCrate(item.getBeverage().getId())==null)
+                    return 2501;  //beverage not found
+                if(this.getCrate(item.getBeverage().getId()).getInStock() < item.getQuantity())
+                    return 2502; //insufficient stock
+            }
+        }
+
+
+
         this.orders.add(order);
+        return 2505;
     }
 
     public Order getOrder(final int id) {

@@ -20,14 +20,14 @@ public class OrderService {
         return this.db.getAllOrders();
     }
 
-    public Order addOrder(final Order newOrder) {
+    public int addOrder(final Order newOrder) {
         if (newOrder == null) {
-            return null;
+            return 2510;
         }
 
-        this.db.addOrder(newOrder);
+        return this.db.addOrder(newOrder);
 
-        return newOrder;
+        //return newOrder;
     }
 
     public Order getOrder(int id){

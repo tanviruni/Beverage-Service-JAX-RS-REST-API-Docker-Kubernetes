@@ -50,9 +50,12 @@ public class OrderResource {
         }
         final Order newOrder = orderDTO.unmarshall();
 
-        OrderService.instance.addOrder(newOrder);
+        int res = OrderService.instance.addOrder(newOrder);
 
-        return Response.ok().build();
+        //String
+        //switch (res)
+
+        return Response.status(Response.Status.OK).entity("This is my personalized message").build();
 //
 //        return Response.created(UriBuilder.fromUri(uriInfo.getBaseUri()).path(CatResource.class).path(CatResource.class, "getCat").build(cat.getId())).build();
     }
