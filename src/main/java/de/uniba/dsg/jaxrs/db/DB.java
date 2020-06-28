@@ -85,6 +85,20 @@ public class DB {
 
     public List<Order> getAllOrders(){ return this.orders; }
 
+    public void addOrder(final Order order) {
+        order.setOrderId(this.orders.stream().map(Order::getOrderId).max(Comparator.naturalOrder()).orElse(0) + 1);
+        order.setStatus(OrderStatus.SUBMITTED);
+        System.out.println(order);
+        this.orders.add(order);
+    }
+
+    public Order getOrder(final int id) {
+        for(Order order: this.orders)
+            if(order.getOrderId() == id)
+                return order;
+        return null;
+    }
+
     public Bottle getBottle(final int id) {
         return this.bottles.stream().filter(c -> c.getId() == id).findFirst().orElse(null);
     }

@@ -46,6 +46,8 @@ public class BeverageResource {
 
         return Response.ok(entity).build();
 
+
+
     }
 
     @PUT

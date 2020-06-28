@@ -16,6 +16,8 @@ public class Order {
         this.status = status;
     }
 
+//    public Order(){}
+
     public int getOrderId() {
         return orderId;
     }
@@ -42,6 +44,10 @@ public class Order {
 
     public void setStatus(OrderStatus status) {
         this.status = status;
+    }
+
+    public void setOrderId(int orderId) {
+        this.orderId = orderId;
     }
 
     @Override

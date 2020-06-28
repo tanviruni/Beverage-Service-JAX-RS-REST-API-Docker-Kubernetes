@@ -1,6 +1,7 @@
 package de.uniba.dsg.jaxrs.dto;
 
 import de.uniba.dsg.jaxrs.model.Order;
+import de.uniba.dsg.jaxrs.model.OrderItem;
 import de.uniba.dsg.jaxrs.model.OrderStatus;
 
 import javax.xml.bind.annotation.*;
@@ -30,6 +31,23 @@ public class OrderDTO {
         final List<OrderDTO> ordList = new ArrayList<OrderDTO>();
         for (Order o: orders) ordList.add(new OrderDTO(o));
         return ordList;
+    }
+
+    public Order unmarshall(){
+        List<OrderItem> items = new ArrayList<OrderItem>();
+        OrderItem tempItem;
+        int tempId = 10;
+        for(OrderItemDTO itemDTO: this.positions){
+            tempItem = itemDTO.unmarshall();
+            tempItem.setNumber(tempId);
+            items.add(tempItem);
+            tempId += 10;
+        }
+
+
+        Order order = new Order(this.id, items, this.price, this.status);
+
+        return order;
     }
 
     public int getId() {

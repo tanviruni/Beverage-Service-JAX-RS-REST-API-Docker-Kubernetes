@@ -43,6 +43,39 @@ components:
         inStock:
           type: number
 
+    beverageType:
+      type: string
+      enum: [BOTTLE_TYPE, CRATE_TYPE]
+
+    status:
+      type: string
+      enum: [SUBMITTED, PROCESSED]
+
+    OrderItemDTO:
+      type: object
+      properties:
+        orderNumber:
+          type: number
+        quantity:
+          type: number
+        beverageType:
+          $ref: "#/components/schemas/beverageType"
+        beverageId:
+          type: number
+        price:
+          type: number
+
+    OrderDTO:
+      type: object
+      properties:
+        price:
+          type: number
+        position:
+          type: array
+          items:
+            $ref: "#/components/schemas/OrderItemDTO"
+
+
 paths:
 
   /beverage/bottles:
