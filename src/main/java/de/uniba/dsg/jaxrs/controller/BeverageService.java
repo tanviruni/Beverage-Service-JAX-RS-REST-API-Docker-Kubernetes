@@ -88,4 +88,7 @@ public class BeverageService {
     }
 
 
+    public Bottle getBottleById(final int bottleId) {
+        return this.db.getBottleById(bottleId);
+    }
 }

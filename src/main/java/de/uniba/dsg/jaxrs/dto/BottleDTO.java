@@ -1,5 +1,8 @@
 package de.uniba.dsg.jaxrs.dto;
 import de.uniba.dsg.jaxrs.model.Bottle;
+import de.uniba.dsg.jaxrs.resources.BeverageResource;
+
+import javax.ws.rs.core.UriBuilder;
 import javax.xml.bind.annotation.*;
 import java.net.URI;
 import java.util.ArrayList;
@@ -7,7 +10,7 @@ import java.util.List;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "bottle")
-@XmlType(propOrder = {"id", "name", "volume", "isAlcoholic", "volumePercent", "price","supplier","inStock"})
+@XmlType(propOrder = {"id", "name", "volume", "isAlcoholic", "volumePercent", "price","supplier","inStock","href"})
 public class BottleDTO {
     private int id;
     @XmlElement(required = true)
@@ -18,6 +21,8 @@ public class BottleDTO {
     private double price;
     private String supplier;
     private int inStock;
+    private URI href;
+
 
     public int getId() {
         return id;
@@ -87,7 +92,7 @@ public class BottleDTO {
 
     }
 
-    public BottleDTO(final Bottle bt) {
+    public BottleDTO(final Bottle bt, final URI baseUri) {
         this.id = bt.getId();
         this.name = bt.getName();
         this.volume = bt.getVolume();
@@ -96,12 +101,13 @@ public class BottleDTO {
         this.price = bt.getPrice();
         this.supplier = bt.getSupplier();
         this.inStock = bt.getInStock();
+        this.href = UriBuilder.fromUri(baseUri).path(BeverageResource.class).path(BeverageResource.class, "getBottleById").build("bottle?bottleId=",this.id);
     }
 
-    public static List<BottleDTO> marshall(final List<Bottle> btlList) {
+    public static List<BottleDTO> marshall(final List<Bottle> btlList, final URI baseUri) {
         final ArrayList<BottleDTO> btl = new ArrayList<>();
         for (final Bottle m : btlList) {
-            btl.add(new BottleDTO(m));
+            btl.add(new BottleDTO(m,baseUri));
         }
         return btl;
     }
@@ -121,6 +127,7 @@ public class BottleDTO {
                 ", price='" + this.price +
                 ", supplier='" + this.supplier +
                 ", inStock=" + this.inStock +
+                ", href=" + this.href +
                 '}';
     }
 

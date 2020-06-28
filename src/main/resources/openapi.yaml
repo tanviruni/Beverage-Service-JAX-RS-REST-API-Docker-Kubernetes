@@ -18,6 +18,8 @@ components:
           type: number
         name:
           type: string
+        volumn:
+          type: number
         isAlcoholic:
           type: boolean
         volumePercent:
@@ -28,6 +30,39 @@ components:
           type: string
         inStock:
           type: number
+        href:
+          type: string
+    bottleUpdateDTO:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+        volumn:
+          type: number
+        isAlcoholic:
+          type: boolean
+        volumePercent:
+          type: number
+        price:
+          type: number
+        supplier:
+          type: string
+        inStock:
+          type: number
+    errorMessage:
+      type: object
+      required:
+        - errorType
+      properties:
+        errorType:
+          description: error category, should be extended
+          enum:
+            - INVALID_PARAMETER
+        message:
+          type: string
+          description: A detailed error description
 
     CrateDTO:
       type: object
@@ -103,3 +138,52 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/CrateDTO"
+
+  /beverage/addBottle:
+    post:
+      summary: Create a movie
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/bottleDTO"
+      responses:
+        201:
+          description: Bottle created
+        400:
+          description: Message body was empty
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/errorMessage"
+  /beverage/bottle/{bottleId}:
+    parameters:
+      - name: bottleId
+        # path parameters must be always mandatory!!
+        required: true
+        in: path
+        schema:
+          type: number
+    put:
+      summary: Update specific bottle
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/bottleUpdateDTO"
+      responses:
+        200:
+          description: Updating a bottle
+          content:
+            application/*:
+              # response schema
+              schema:
+                $ref: "#/components/schemas/bottleDTO"
+        400:
+          description: Message body was empty
+          content:
+            application/*:
+              schema:
+                $ref: "#/components/schemas/errorMessage"
+        404:
+          description: Not found
