@@ -90,19 +90,6 @@ components:
           type: number
         inStock:
           type: number
-    errorMessage:
-      type: object
-      required:
-        - errorType
-      properties:
-        errorType:
-          description: error category, should be extended
-          enum:
-            - INVALID_PARAMETER
-        message:
-          type: string
-          description: A detailed error description
-
     beverageType:
       type: string
       enum: [BOTTLE_TYPE, CRATE_TYPE]

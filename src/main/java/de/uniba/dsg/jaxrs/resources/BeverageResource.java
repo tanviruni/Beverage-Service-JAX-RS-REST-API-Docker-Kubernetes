@@ -159,11 +159,11 @@ public class BeverageResource {
 
         return Response.ok().entity(new CrateDTO(resultCr,uriInfo.getBaseUri())).build();
 
-        /*final GenericEntity<List<CrateDTO>> entity = new GenericEntity<List<CrateDTO>>(CrateDTO.marshall(BeverageService.instance.getAllCrates() )){
-        };
-
-        Response build = Response.ok(entity).build();
-        return build;
+//        /*final GenericEntity<List<CrateDTO>> entity = new GenericEntity<List<CrateDTO>>(CrateDTO.marshall(BeverageService.instance.getAllCrates() )){
+//        };*/
+//
+//        Response build = Response.ok(entity).build();
+//        return build;
 
     }
 
