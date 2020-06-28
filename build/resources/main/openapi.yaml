@@ -77,6 +77,31 @@ components:
           type: number
         inStock:
           type: number
+    CrateUpdateDTO:
+      type: object
+      required:
+        - name
+      properties:
+        bottle:
+          type: object
+        noOfBottles:
+          type: number
+        price:
+          type: number
+        inStock:
+          type: number
+    errorMessage:
+      type: object
+      required:
+        - errorType
+      properties:
+        errorType:
+          description: error category, should be extended
+          enum:
+            - INVALID_PARAMETER
+        message:
+          type: string
+          description: A detailed error description
 
     beverageType:
       type: string
@@ -187,3 +212,57 @@ paths:
                 $ref: "#/components/schemas/errorMessage"
         404:
           description: Not found
+  /beverage/addCrates:
+    post:
+      summary: Add a crate
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CrateDTO"
+      responses:
+        '201':
+          description: Created  new beverage crate
+        '400':
+          description: Message body was empty
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CrateDTO'
+  /beverage/editCrate/{crate-id}:
+    parameters:
+      - name: crate-id
+        required: true
+        in: path
+        schema:
+          type: number
+    put:
+      summary: edit a crate
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CrateUpdateDTO"
+      responses:
+        '201':
+          description: Updated crate
+          content:
+            application/*:
+              # response schema
+              schema:
+                $ref: '#/components/schemas/CrateDTO'
+        '400':
+          description: Message body was empty
+          content:
+            application/*:
+              # response schema
+              schema:
+                $ref: '#/components/schemas/errorMessage'
+        '404':
+          description: Not found
+
+
+

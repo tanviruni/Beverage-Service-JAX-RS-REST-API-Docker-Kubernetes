@@ -1,8 +1,9 @@
 package de.uniba.dsg.jaxrs.dto;
-
 import de.uniba.dsg.jaxrs.model.Bottle;
 import de.uniba.dsg.jaxrs.model.Crate;
+import de.uniba.dsg.jaxrs.resources.BeverageResource;
 
+import javax.ws.rs.core.UriBuilder;
 import javax.xml.bind.annotation.*;
 import java.net.URI;
 import java.util.ArrayList;
@@ -10,17 +11,16 @@ import java.util.List;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "crate")
-@XmlType(propOrder = {"id","bottle","noOfBottles","price","inStock"})
-
+@XmlType(propOrder = {"id","bottle","noOfBottles","price","inStock","href"})
 public class CrateDTO {
-
     private int id;
     @XmlElement(required = true)
-
     private Bottle bottle;
     private int noOfBottles;
     private double price;
     private int inStock;
+    private URI href;
+
 
     public int getId() {
         return id;
@@ -62,35 +62,36 @@ public class CrateDTO {
 
     }
 
-    public CrateDTO(final Crate cr) {
-        this.id = cr.getId();
-        this.bottle = cr.getBottle();
-        this.noOfBottles = cr.getNoOfBottles();
-        this.price = cr.getPrice();
-        this.inStock = cr.getInStock();
-
+    public CrateDTO(final Crate bt, final URI baseUri) {
+        this.id = bt.getId();
+        this.bottle = bt.getBottle();
+        this.noOfBottles = bt.getNoOfBottles();
+        this.price = bt.getBottle().getPrice() * bt.getNoOfBottles();
+        this.inStock = bt.getInStock();
+        this.href = UriBuilder.fromUri(baseUri).path(BeverageResource.class).path(BeverageResource.class, "getCrateById").build("crate?crateId=",this.id);
     }
 
-    public static List<CrateDTO> marshall(final List<Crate> crateList) {
-        final ArrayList<CrateDTO> crates = new ArrayList<>();
-        for(final Crate b : crateList) {
-            crates.add(new CrateDTO(b));
+    public static List<CrateDTO> marshall(final List<Crate> btlList, final URI baseUri) {
+        final ArrayList<CrateDTO> btl = new ArrayList<>();
+        for (final Crate m : btlList) {
+            btl.add(new CrateDTO(m,baseUri));
         }
-        return crates;
+        return btl;
     }
 
-    public Crate unmarshall(){
+    public Crate unmarshall() {
         return new Crate(this.id, this.bottle, this.noOfBottles, this.price, this.inStock);
     }
 
     @Override
     public String toString() {
-        return "Crate{" +
-                "id=" + id +
-                ", bottle=" + bottle +
-                ", noOfBottles=" + noOfBottles +
-                ", price=" + price +
-                ", inStock=" + inStock +
+        return "BottleDTO{" +
+                "id=" + this.id +
+                ", bottle=" + this.bottle +
+                ", noOfBottles='" + this.noOfBottles +
+                ", price='" + this.price +
+                ", inStock=" + this.inStock +
+                ", href=" + this.href +
                 '}';
     }
 
