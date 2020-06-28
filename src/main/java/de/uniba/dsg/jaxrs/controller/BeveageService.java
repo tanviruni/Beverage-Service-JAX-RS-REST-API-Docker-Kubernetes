@@ -52,4 +52,8 @@ public class BeveageService {
 
         return btl;
     }
+
+    public Bottle getBottleById(final int bottleId) {
+        return this.db.getBottleById(bottleId);
+    }
 }

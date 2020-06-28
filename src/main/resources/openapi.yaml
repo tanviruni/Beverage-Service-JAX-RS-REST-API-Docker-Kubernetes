@@ -28,6 +28,18 @@ components:
           type: string
         inStock:
           type: number
+    errorMessage:
+      type: object
+      required:
+        - errorType
+      properties:
+        errorType:
+          description: error category, should be extended
+          enum:
+            - INVALID_PARAMETER
+        message:
+          type: string
+          description: A detailed error description
 
 paths:
 
@@ -43,3 +55,21 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/bottleDTO"
+
+  /beverage/addBottle:
+    post:
+      summary: Create a movie
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/bottleDTO"
+      responses:
+        201:
+          description: Bottle created
+        400:
+          description: Message body was empty
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/errorMessage"
