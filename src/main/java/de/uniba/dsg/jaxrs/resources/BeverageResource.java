@@ -78,28 +78,16 @@ public class BeverageResource {
     }
 
 
-    @GET
-    @Path("{bottle}/{bottleId}")
-    public Response getBottleById( @PathParam("bottleId") final int bottleId, @Context final UriInfo uriInfo) {
-        logger.info("Get Movie with Id: " + bottleId);
-        final Bottle m = BeverageService.instance.getBottleById(bottleId);
-        if (m == null) {
-            logger.info("Movie not found: " + bottleId);
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
-        return Response.ok(new BottleDTO(m, uriInfo.getBaseUri())).build();
-    }
-
 
 
 
     @GET
     @Path("{bottle}/{bottleId}")
     public Response getBottleById( @PathParam("bottleId") final int bottleId, @Context final UriInfo uriInfo) {
-        logger.info("Get Movie with Id: " + bottleId);
+        logger.info("Get Bottle with Id: " + bottleId);
         final Bottle m = BeverageService.instance.getBottleById(bottleId);
         if (m == null) {
-            logger.info("Movie not found: " + bottleId);
+            logger.info("Bottle not found: " + bottleId);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
         return Response.ok(new BottleDTO(m, uriInfo.getBaseUri())).build();
@@ -125,8 +113,8 @@ public class BeverageResource {
 
         return Response.created(uri).build();
 
-        Response build = Response.ok(entity).build();
-        return build;
+//        Response build = Response.ok(entity).build();
+//        return build;
 
     }
 
