@@ -87,6 +87,10 @@ public class BeverageService {
         return cr;
     }
 
+    public Crate getCrateById(final int crateId) {
+        return this.db.getCrateById(crateId);
+    }
+
 
     public Bottle getBottleById(final int bottleId) {
         return this.db.getBottleById(bottleId);

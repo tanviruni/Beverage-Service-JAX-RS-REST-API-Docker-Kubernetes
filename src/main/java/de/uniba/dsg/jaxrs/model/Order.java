@@ -38,6 +38,13 @@ public class Order {
         this.price = price;
     }
 
+    public void setPrice(){
+        double price = 0;
+        for(OrderItem item: this.getPositions()){
+            price += item.getBeverage().getPrice() * item.getQuantity();
+        }
+        this.setPrice(price);
+    }
     public OrderStatus getStatus() {
         return status;
     }
@@ -49,6 +56,8 @@ public class Order {
     public void setOrderId(int orderId) {
         this.orderId = orderId;
     }
+
+
 
     @Override
     public String toString() {

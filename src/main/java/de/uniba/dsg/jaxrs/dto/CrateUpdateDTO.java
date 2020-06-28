@@ -3,10 +3,7 @@ package de.uniba.dsg.jaxrs.dto;
 import de.uniba.dsg.jaxrs.model.Bottle;
 import de.uniba.dsg.jaxrs.model.Crate;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.*;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "cratePostDto")
