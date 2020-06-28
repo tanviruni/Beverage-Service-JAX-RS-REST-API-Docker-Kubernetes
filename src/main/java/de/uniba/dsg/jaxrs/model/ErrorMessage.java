@@ -2,7 +2,7 @@ package de.uniba.dsg.jaxrs.model;
 
 import javax.xml.bind.annotation.XmlElement;
 
-public class ErrorMessage {
+public class ErrorMessage{
 
     @XmlElement(required = true)
     private ErrorType errorType;

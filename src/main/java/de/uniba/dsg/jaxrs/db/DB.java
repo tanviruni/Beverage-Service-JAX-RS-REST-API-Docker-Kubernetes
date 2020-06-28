@@ -83,8 +83,57 @@ public class DB {
         this.bottles.add(m);
     }
 
+    public List<Order> getAllOrders(){ return this.orders; }
+
+    /***
+     * return codes:
+     *      2501        - invalid parameters. beverage not found
+     *      2502        - insufficient stock
+     *      2505        - successfully inserted
+     ***/
+    public int addOrder(final Order order) {
+        order.setOrderId(this.orders.stream().map(Order::getOrderId).max(Comparator.naturalOrder()).orElse(0) + 1);
+        order.setPrice();
+        order.setStatus(OrderStatus.SUBMITTED);
+
+        /**
+         * stock validation
+         */
+        int returnVal = 0;
+        for(OrderItem item: order.getPositions()){
+            if(item.getBeverage().getClass()==Bottle.class){
+                if(this.getBottle(item.getBeverage().getId())==null)
+                    return 2501;  //beverage not found
+                if(this.getBottle(item.getBeverage().getId()).getInStock() < item.getQuantity())
+                    return 2502; //insufficient stock
+            }
+            else {
+                if(this.getCrate(item.getBeverage().getId())==null)
+                    return 2501;  //beverage not found
+                if(this.getCrate(item.getBeverage().getId()).getInStock() < item.getQuantity())
+                    return 2502; //insufficient stock
+            }
+        }
+
+
+
+        this.orders.add(order);
+        return 2505;
+    }
+
+    public Order getOrder(final int id) {
+        for(Order order: this.orders)
+            if(order.getOrderId() == id)
+                return order;
+        return null;
+    }
+
     public Bottle getBottle(final int id) {
         return this.bottles.stream().filter(c -> c.getId() == id).findFirst().orElse(null);
+    }
+
+    public Bottle getBottleById(final int bottleId) {
+        return this.bottles.stream().filter(m -> m.getId() == bottleId).findFirst().orElse(null);
     }
 
     public List<Crate> getAllCrates() {

@@ -16,6 +16,8 @@ public class Order {
         this.status = status;
     }
 
+//    public Order(){}
+
     public int getOrderId() {
         return orderId;
     }
@@ -36,6 +38,13 @@ public class Order {
         this.price = price;
     }
 
+    public void setPrice(){
+        double price = 0;
+        for(OrderItem item: this.getPositions()){
+            price += item.getBeverage().getPrice() * item.getQuantity();
+        }
+        this.setPrice(price);
+    }
     public OrderStatus getStatus() {
         return status;
     }
@@ -43,6 +52,12 @@ public class Order {
     public void setStatus(OrderStatus status) {
         this.status = status;
     }
+
+    public void setOrderId(int orderId) {
+        this.orderId = orderId;
+    }
+
+
 
     @Override
     public String toString() {

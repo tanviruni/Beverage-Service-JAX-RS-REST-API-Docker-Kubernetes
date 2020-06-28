@@ -2,6 +2,7 @@ package de.uniba.dsg.jaxrs;
 
 import de.uniba.dsg.jaxrs.resources.BeverageResource;
 import de.uniba.dsg.jaxrs.resources.SwaggerUI;
+import de.uniba.dsg.jaxrs.resources.OrderResource;
 
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.Consumes;
@@ -20,6 +21,7 @@ public class ExamplesApi extends Application {
         final Set<Class<?>> resources = new HashSet<>();
 
         resources.add(BeverageResource.class);
+        resources.add(OrderResource.class);
         resources.add(SwaggerUI.class);
         return resources;
     }
