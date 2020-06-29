@@ -46,108 +46,111 @@ public class OrderResource {
     }
 
     @GET
-            @Path("getOrder")
-            @Produces(MediaType.APPLICATION_JSON)
-            public Response getOrder(@QueryParam("id") final int id) {
-                final GenericEntity<OrderDTO> entity = new GenericEntity<OrderDTO>(new OrderDTO(OrderService.instance.getOrder(id))) {
-                };
-                System.out.println();
-                return Response.ok(entity).build();
-            }
+    @Path("getOrder")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getOrder(@QueryParam("id") final int id) {
+        final Order ord = OrderService.instance.getOrder(id);
+        if(ord==null)  return Response.status(Response.Status.NOT_FOUND).build();
+        final GenericEntity<OrderDTO> entity = new GenericEntity<OrderDTO>(new OrderDTO(ord)) {
+        };
 
-            @POST
-            @Consumes(MediaType.APPLICATION_JSON)
-            public Response createOrder(final OrderDTO orderDTO) {
-                if (orderDTO == null) {
-                    //***TBE
-                    //return Response.status(Response.Status.BAD_REQUEST).entity(new ErrorMessage(ErrorType.INVALID_PARAMETER, "Body was empty")).build();
-                }
-                final Order newOrder = orderDTO.unmarshall();
+        return Response.ok(entity).build();
+    }
 
-                ErrorType res;
-                for (OrderItem item : newOrder.getPositions()) {
-                    if (item.getBeverage() == null)
-                        return Response.status(Response.Status.NOT_FOUND).entity(new ErrorMessage(ErrorType.ITEM_NOT_FOUND)).build();
-                }
-                res = OrderService.instance.addOrder(newOrder);
+    @POST
+    @Path("addOrder")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response createOrder(final OrderDTO orderDTO) {
+        if (orderDTO == null) {
+            //***TBE
+            return Response.status(Response.Status.BAD_REQUEST).entity(new ErrorMessage(ErrorType.INVALID_PARAMETER, "Body was empty")).build();
+        }
+        final Order newOrder = orderDTO.unmarshall();
+
+        ErrorType res;
+        for (OrderItem item : newOrder.getPositions()) {
+            if (item.getBeverage() == null)
+                return Response.status(Response.Status.NOT_FOUND).entity(new ErrorMessage(ErrorType.ITEM_NOT_FOUND)).build();
+        }
+        res = OrderService.instance.addOrder(newOrder);
 
 
-                switch (res) {
-                    case INSERT_SUCCESSFUL:
-                        return Response.status(Response.Status.OK).entity(new ErrorMessage(ErrorType.INSERT_SUCCESSFUL)).build();
+        switch (res) {
+            case INSERT_SUCCESSFUL:
+                return Response.status(Response.Status.OK).entity(new ErrorMessage(ErrorType.INSERT_SUCCESSFUL)).build();
 
-                    case INSUFFICIENT_STOCK:
-                        return Response.status(Response.Status.NOT_ACCEPTABLE).entity(new ErrorMessage(ErrorType.INSUFFICIENT_STOCK)).build();
+            case INSUFFICIENT_STOCK:
+                return Response.status(Response.Status.NOT_ACCEPTABLE).entity(new ErrorMessage(ErrorType.INSUFFICIENT_STOCK)).build();
 
-                    case ITEM_NOT_FOUND:
-                        return Response.status(Response.Status.NOT_FOUND).entity(new ErrorMessage(ErrorType.ITEM_NOT_FOUND)).build();
+            case ITEM_NOT_FOUND:
+                return Response.status(Response.Status.NOT_FOUND).entity(new ErrorMessage(ErrorType.ITEM_NOT_FOUND)).build();
 
-                    default:
-                        return Response.status(Response.Status.BAD_REQUEST).build();
-                }
+            default:
+                return Response.status(Response.Status.BAD_REQUEST).build();
+        }
 
 
 //
 //        return Response.created(UriBuilder.fromUri(uriInfo.getBaseUri()).path(CatResource.class).path(CatResource.class, "getCat").build(cat.getId())).build();
-            }
+    }
 
-            @PUT
-            @Path("editOrder/{id}")
-            public Response editOrder(@PathParam("id") final int id, final OrderUpdateDTO updatedOrder) {
-                logger.info("Updating order " + updatedOrder);
-                if (updatedOrder == null) {
-                    return Response.status(Response.Status.BAD_REQUEST).entity(new ErrorMessage(ErrorType.INVALID_PARAMETER, "Body was empty")).build();
-                }
-
-                final Order ord = OrderService.instance.getOrder(id);
-
-
-                if (ord == null) {
-                    return Response.status(Response.Status.NOT_FOUND).build();
-                } else if (ord.getStatus() == OrderStatus.PROCESSED)
-                    return Response.status(Response.Status.UNAUTHORIZED).entity("This order is already processed").build();
-
-                final Order resultord = OrderService.instance.updateOrder(id, updatedOrder.unmarshall());
-                System.out.println("udating resource");
-                return Response.ok().entity(new OrderDTO(resultord)).build();
-                //return Response.ok().build();
-            }
-
-            @GET
-            @Path("process/{id}")
-            @Produces({MediaType.TEXT_PLAIN})
-            public Response processOrder(@PathParam("id") final int id) {
-                //logger.info("Updating order " + updatedOrder);
-
-                final Order ord = OrderService.instance.getOrder(id);
-
-                if (ord == null) {
-                    return Response.status(Response.Status.NOT_FOUND).build();
-                } else if (ord.getStatus() == OrderStatus.PROCESSED)
-                    return Response.status(Response.Status.UNAUTHORIZED).entity("This order is already processed").build();
-
-                OrderService.instance.processOrder(id);
-                logger.info("Order with id - " + id + " has been processed");
-                return Response.ok().entity("Order with id - " + id + " has been processed").build();
-
-            }
-
-            @GET
-            @Path("cancelOrder/{id}")
-            @Produces({MediaType.TEXT_PLAIN})
-            public Response cancelOrder(@PathParam("id") final int id) {
-                final Order ord = OrderService.instance.getOrder(id);
-
-                if (ord == null) {
-                    return Response.status(Response.Status.NOT_FOUND).build();
-                } else if (ord.getStatus() == OrderStatus.PROCESSED)
-                    return Response.status(Response.Status.UNAUTHORIZED).entity("This order is already processed").build();
-
-                OrderService.instance.cancelOrder(id);
-                logger.info("Order with id - " + id + " has been cancelled");
-                return Response.ok().entity("Order with id - " + id + " has been cancelled").build();
-            }
-
+    @PUT
+    @Path("editOrder/{id}")
+    public Response editOrder(@PathParam("id") final int id, final OrderUpdateDTO updatedOrder) {
+        logger.info("Updating order " + updatedOrder);
+        if (updatedOrder == null) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(new ErrorMessage(ErrorType.INVALID_PARAMETER, "Body was empty")).build();
         }
+
+        final Order ord = OrderService.instance.getOrder(id);
+
+
+        if (ord == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        } else if (ord.getStatus() == OrderStatus.PROCESSED)
+            return Response.status(Response.Status.UNAUTHORIZED).entity("This order is already processed").build();
+
+        final Order resultord = OrderService.instance.updateOrder(id, updatedOrder.unmarshall());
+        System.out.println("udating resource");
+        return Response.ok().entity(new OrderDTO(resultord)).build();
+        //return Response.ok().build();
+    }
+
+    @GET
+    @Path("process/{id}")
+    @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON})
+    public Response processOrder(@PathParam("id") final int id) {
+        //logger.info("Updating order " + updatedOrder);
+
+        final Order ord = OrderService.instance.getOrder(id);
+
+        if (ord == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        } else if (ord.getStatus() == OrderStatus.PROCESSED)
+            return Response.status(Response.Status.UNAUTHORIZED).entity("This order is already processed").build();
+
+        OrderService.instance.processOrder(id);
+        logger.info("Order with id - " + id + " has been processed");
+        return Response.ok().entity("Order with id - " + id + " has been processed").build();
+
+    }
+
+    @GET
+    @Path("cancelOrder/{id}")
+    @Produces({MediaType.TEXT_PLAIN})
+    public Response cancelOrder(@PathParam("id") final int id) {
+        final Order ord = OrderService.instance.getOrder(id);
+
+        if (ord == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        } else if (ord.getStatus() == OrderStatus.PROCESSED)
+            return Response.status(Response.Status.UNAUTHORIZED).entity("This order is already processed").build();
+
+        OrderService.instance.cancelOrder(id);
+        logger.info("Order with id - " + id + " has been cancelled");
+        return Response.ok().entity("Order with id - " + id + " has been cancelled").build();
+    }
+
+}
 
 
