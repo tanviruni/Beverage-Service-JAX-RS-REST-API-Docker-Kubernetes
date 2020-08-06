@@ -9,7 +9,7 @@ targetCompatibility = '1.8'
 repositories {
     mavenCentral()
 }
-
+//------------------------
 def props = new Properties()
 file("src/main/resources/config.properties").withInputStream { props.load(it) }
 
