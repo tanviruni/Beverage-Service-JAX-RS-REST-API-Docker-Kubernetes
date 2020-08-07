@@ -15,6 +15,8 @@ public class Crate implements Beverage{
         this.inStock = inStock;
     }
 
+    public  Crate(){ }
+
     public int getId() {
         return id;
     }

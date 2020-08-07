@@ -1,10 +1,12 @@
-package de.uniba.dsg.jaxrs;
+package de.uniba.dsg.jaxrs.controller;
 
+import de.uniba.dsg.jaxrs.Configuration;
 import de.uniba.dsg.jaxrs.dto.BottleDTO;
 import de.uniba.dsg.jaxrs.dto.CrateDTO;
 import de.uniba.dsg.jaxrs.model.Bottle;
 import de.uniba.dsg.jaxrs.model.Crate;
 
+import javax.ws.rs.ProcessingException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.GenericType;
@@ -31,7 +33,7 @@ public class BeverageServiceBackend {
         log.info("Using rest backend implementation with "+ this.uri);
     }
 
-    public List<Bottle> getBottles(){
+    public List<Bottle> getBottles() throws ProcessingException {
         Client client = ClientBuilder.newClient();
         Response response = client.target(this.uri)
                 .path("/beverage/bottles") // http://localhost:9999/v1/beverage/bottles
@@ -46,14 +48,14 @@ public class BeverageServiceBackend {
                     .map(x -> x.unmarshall())
                     .collect(Collectors.toList());
         } else {
-            log.info("Error in fetching all bottles Status code " + response.getStatus());
+            log.info("Error in fetching all bottles from DB-Handler Status code " + response.getStatus());
         }
         //System.out.println(returnCat.toString());
         List<Bottle> list = new ArrayList<>();
         return list;
     }
 
-    public List<Crate> getCrates(){
+    public List<Crate> getCrates() throws ProcessingException{
         Client client = ClientBuilder.newClient();
         Response response = client.target(this.uri)
                 .path("/beverage/crates") // http://localhost:9999/v1/beverage/bottles
@@ -66,11 +68,11 @@ public class BeverageServiceBackend {
             })
                     .stream()
                     .map(x -> {
-                        System.out.println(x); return x.unmarshall();})
+                        return x.unmarshall();})
                     .collect(Collectors.toList());
 
         } else {
-            log.info("Error in fetching all crates Status code " + response.getStatus());
+            log.info("Error in fetching all crates from DB-Handler Status code " + response.getStatus());
         }
         //System.out.println(returnCat.toString());
         List<Crate> list = new ArrayList<>();

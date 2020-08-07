@@ -58,7 +58,7 @@ public class CrateDTO {
     }
 
     public CrateDTO(){
-        ;
+
     }
 
     public CrateDTO(final Crate bt, final URI baseUri) {

@@ -1,14 +1,11 @@
 package de.uniba.dsg.jaxrs.resource;
 
 import de.uniba.dsg.jaxrs.controller.BeverageService;
-import de.uniba.dsg.jaxrs.dto.BeveragesDTO;
 import de.uniba.dsg.jaxrs.dto.BottleDTO;
 import de.uniba.dsg.jaxrs.dto.CrateDTO;
-import de.uniba.dsg.jaxrs.model.Beverage;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -52,17 +49,7 @@ public class BeverageResource {
 
     }
 
-    @GET
-    @Path("all")
-    @Produces(MediaType.APPLICATION_JSON)
-    public BeveragesDTO getBeverages(@Context final UriInfo uriInfo,
-                                           @QueryParam("pageLimit") @DefaultValue("10") final int pageLimit,
-                                           @QueryParam("page") @DefaultValue("1") final int page) {
-        logger.info("Get all beverages. Pagination parameter: page-\" + page + \" pageLimit-\" + pageLimit");
 
-        BeveragesDTO dtos = new BeveragesDTO(BeverageService.instance.getAllBottles(), BeverageService.instance.getAllCrates());
-        return dtos;
-    }
 
 
 

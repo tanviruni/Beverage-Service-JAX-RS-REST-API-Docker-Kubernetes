@@ -1,6 +1,7 @@
 package de.uniba.dsg.jaxrs;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.URI;
 import java.util.List;
 import java.util.Properties;
@@ -8,6 +9,7 @@ import java.util.Properties;
 import javax.ws.rs.core.UriBuilder;
 
 import com.sun.net.httpserver.HttpServer;
+import de.uniba.dsg.jaxrs.controller.BeverageServiceBackend;
 import de.uniba.dsg.jaxrs.model.Bottle;
 import de.uniba.dsg.jaxrs.model.Crate;
 import org.glassfish.jersey.jdkhttp.JdkHttpServerFactory;
@@ -17,20 +19,16 @@ public class JaxRsServer {
     private static Properties properties = Configuration.loadProperties();
 
     public static void main(String[] args) throws IOException {
-//        String serverUri = properties.getProperty("serverUri");
-//
-//        URI baseUri = UriBuilder.fromUri(serverUri).build();
-//        ResourceConfig config = ResourceConfig.forApplicationClass(ExamplesApi.class);
-//        HttpServer server = JdkHttpServerFactory.createHttpServer(baseUri, config);
-//        System.out.println("Server ready to serve your JAX-RS requests...");
-//        System.out.println("Press any key to exit...");
-//        System.in.read();
-//        System.out.println("Stopping server");
-//        server.stop(1);
+        String serverUri = properties.getProperty("serverUri");
 
-//        List<Bottle> bottles = new BeverageServiceBackend("").getBottles();
-//        for (Bottle b: bottles) {
-//            System.out.println(b);
-//        }
+        URI baseUri = UriBuilder.fromUri(serverUri).build();
+        ResourceConfig config = ResourceConfig.forApplicationClass(ExamplesApi.class);
+        HttpServer server = JdkHttpServerFactory.createHttpServer(baseUri, config);
+        System.out.println("Server ready to serve your JAX-RS requests...");
+        System.out.println("Press any key to exit...");
+        System.in.read();
+        System.out.println("Stopping server");
+        server.stop(1);
+
     }
 }
