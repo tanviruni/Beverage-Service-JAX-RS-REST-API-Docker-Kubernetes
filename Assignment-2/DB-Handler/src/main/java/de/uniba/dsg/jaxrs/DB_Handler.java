@@ -17,12 +17,17 @@ import java.util.Properties;
 import java.util.logging.Logger;
 
 public class DB_Handler {
+    public static final DB_Handler instance;// = new DB_Handler();
     private static Properties properties = Configuration.loadProperties();
     private static final Logger logger = Logger.getLogger("DB_Handler");
     private File dbFileBottle;
     private File dbFileCrate;
     private List<Bottle> bottles;
     private List<Crate> crates;
+
+    static {
+        instance = new DB_Handler();
+    }
 
     public DB_Handler(){
         this.dbFileBottle = new File(properties.getProperty("bottleFile"));
@@ -69,15 +74,6 @@ public class DB_Handler {
         return this.crates;
     }
 
-    public Crate getCrate(int crateId){
-        Crate crate = null;
-
-        for(Crate c: this.crates)
-            if (c.getId() == crateId)
-                return c;
-        return crate;
-    }
-
     public Bottle getBottle(int bottleId){
         Bottle bottle = null;
 
@@ -85,6 +81,15 @@ public class DB_Handler {
             if (b.getId() == bottleId)
                 return b;
         return bottle;
+    }
+
+    public Crate getCrate(int crateId){
+        Crate crate = null;
+
+        for(Crate c: this.crates)
+            if (c.getId() == crateId)
+                return c;
+        return crate;
     }
 
     public void insertBottle(Bottle bottle){
@@ -95,7 +100,9 @@ public class DB_Handler {
 
     public void insertCrate(Crate crate){
         crate.setId(this.crates.stream().map(Crate::getId).max(Comparator.naturalOrder()).orElse(0) + 1);
+        crate.setPrice(crate.getBottle().getPrice()*crate.getNoOfBottles());
         this.crates.add(crate);
+        System.out.println(crate);
         this.persistCrates();
     }
 
@@ -171,7 +178,6 @@ public class DB_Handler {
 
         return bottles;
     }
-
 
     private List<Crate> readAllCratesFromDB(){
 

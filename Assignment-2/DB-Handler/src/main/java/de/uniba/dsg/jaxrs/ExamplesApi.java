@@ -1,6 +1,7 @@
 package de.uniba.dsg.jaxrs;
 
-import de.uniba.dsg.jaxrs.resource.BeverageResource;
+import de.uniba.dsg.jaxrs.resource.BeverageGetResource;
+import de.uniba.dsg.jaxrs.resource.BeveragePostResource;
 
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.Consumes;
@@ -17,7 +18,8 @@ public class ExamplesApi extends Application {
     @Override
     public Set<Class<?>> getClasses() {
         final Set<Class<?>> resources = new HashSet<>();
-        resources.add(BeverageResource.class);
+        resources.add(BeverageGetResource.class);
+        resources.add(BeveragePostResource.class);
         return resources;
     }
 }

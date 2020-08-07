@@ -1,4 +1,5 @@
 package de.uniba.dsg.jaxrs.dto;
+
 import de.uniba.dsg.jaxrs.model.Bottle;
 
 import javax.xml.bind.annotation.*;
@@ -8,9 +9,9 @@ import java.util.List;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "bottle")
-@XmlType(propOrder = {"id", "name", "volume", "isAlcoholic", "volumePercent", "price","supplier","inStock"})
-public class BottleDTO {
-    private int id;
+@XmlType(propOrder = {"name", "volume", "isAlcoholic", "volumePercent", "price","supplier","inStock"})
+public class BottleCreateDTO {
+
     @XmlElement(required = true)
     private String name;
     @XmlElement(required = true)
@@ -25,16 +26,7 @@ public class BottleDTO {
     private String supplier;
     @XmlElement(required = true)
     private int inStock;
-    //private URI href;
 
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;
@@ -92,38 +84,17 @@ public class BottleDTO {
         this.inStock = inStock;
     }
 
-    public BottleDTO(){
+    public BottleCreateDTO(){
 
-    }
-
-    public BottleDTO(final Bottle bt) {
-        this.id = bt.getId();
-        this.name = bt.getName();
-        this.volume = bt.getVolume();
-        this.isAlcoholic = bt.isAlcoholic();
-        this.volumePercent = bt.getVolumePercent();
-        this.price = bt.getPrice();
-        this.supplier = bt.getSupplier();
-        this.inStock = bt.getInStock();
-        //this.href = null;//UriBuilder.fromUri(baseUri).path(BeverageResource.class).path(BeverageResource.class, "getBottleById").build("bottle?bottleId=",this.id);
-    }
-
-    public static List<BottleDTO> marshall(final List<Bottle> btlList, final URI baseUri) {
-        final ArrayList<BottleDTO> btl = new ArrayList<>();
-        for (final Bottle m : btlList) {
-            btl.add(new BottleDTO(m));
-        }
-        return btl;
     }
 
     public Bottle unmarshall() {
-        return new Bottle(this.id, this.name, this.volume,this.isAlcoholic,this.volumePercent,this.price,this.supplier,this.inStock);
+        return new Bottle(-1, this.name, this.volume,this.isAlcoholic,this.volumePercent,this.price,this.supplier,this.inStock);
     }
 
     @Override
     public String toString() {
         return "BottleDTO{" +
-                "id=" + this.id +
                 ", name=" + this.name +
                 ", volume='" + this.volume +
                 ", isAlcoholic='" + this.isAlcoholic +
@@ -134,5 +105,4 @@ public class BottleDTO {
                 //", href=" + this.href +
                 '}';
     }
-
 }
