@@ -1,19 +1,14 @@
 package de.uniba.dsg.jaxrs;
 
-import java.io.IOException;
-import java.net.InetAddress;
-import java.net.URI;
-import java.util.List;
-import java.util.Properties;
-
-import javax.ws.rs.core.UriBuilder;
-
 import com.sun.net.httpserver.HttpServer;
-import de.uniba.dsg.jaxrs.controller.BeverageServiceBackend;
-import de.uniba.dsg.jaxrs.model.Bottle;
-import de.uniba.dsg.jaxrs.model.Crate;
 import org.glassfish.jersey.jdkhttp.JdkHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
+
+
+import javax.ws.rs.core.UriBuilder;
+import java.io.IOException;
+import java.net.URI;
+import java.util.Properties;
 
 public class JaxRsServer {
     private static Properties properties = Configuration.loadProperties();

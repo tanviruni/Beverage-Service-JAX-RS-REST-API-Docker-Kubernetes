@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: com.github.cliftonlabs:json-simple:3.1.0">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.cliftonlabs/json-simple/3.1.0/1e1c3e8927b78873e61ccc9f9b08e83c0630e35a/json-simple-3.1.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.cliftonlabs/json-simple/3.1.0/62d3e9e73565362c9e38b3186c4f09acb0ebbb65/json-simple-3.1.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
