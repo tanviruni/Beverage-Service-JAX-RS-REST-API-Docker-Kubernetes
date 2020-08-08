@@ -20,7 +20,7 @@ public class BeverageGetResource {
     private static final Logger logger = Logger.getLogger("BeverageGetResource");
 
     @GET
-    @Path("{bottles}")
+    @Path("bottles")
     @Produces({MediaType.APPLICATION_JSON})
     public Response getBottles(@Context final UriInfo uriInfo,
                                @QueryParam("pageLimit") @DefaultValue("10") final int pageLimit,
@@ -56,7 +56,7 @@ public class BeverageGetResource {
 
 
     @GET
-    @Path("{bottles}/{bottleId}")
+    @Path("bottles/{bottleId}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getBottleById( @PathParam("bottleId") final int bottleId) {
         logger.info("Get Bottle with Id: " + bottleId);

@@ -1,5 +1,7 @@
 package de.uniba.dsg.jaxrs;
 
+import de.uniba.dsg.jaxrs.controller.BeverageDeleteService;
+import de.uniba.dsg.jaxrs.resource.BeverageDeleteResource;
 import de.uniba.dsg.jaxrs.resource.BeverageGetResource;
 import de.uniba.dsg.jaxrs.resource.BeveragePostResource;
 
@@ -20,6 +22,7 @@ public class ExamplesApi extends Application {
         final Set<Class<?>> resources = new HashSet<>();
         resources.add(BeverageGetResource.class);
         resources.add(BeveragePostResource.class);
+        resources.add(BeverageDeleteResource.class);
         return resources;
     }
 }

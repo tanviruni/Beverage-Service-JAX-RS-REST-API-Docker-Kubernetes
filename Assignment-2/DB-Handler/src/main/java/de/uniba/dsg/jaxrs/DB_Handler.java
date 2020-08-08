@@ -106,6 +106,16 @@ public class DB_Handler {
         this.persistCrates();
     }
 
+    public void deleteBottle(Bottle bottle){
+        this.bottles.remove(bottle);
+        this.persistBottles();
+    }
+
+    public void deleteCrate(Crate crate){
+        this.crates.remove(crate);
+        this.persistCrates();
+    }
+
     private void persistBottles(){
         try {
             JsonArray arr = new JsonArray();
@@ -204,6 +214,12 @@ public class DB_Handler {
         return crates;
     }
 
-
+    public List<Crate> searchCratesWithBottle(Bottle bottle){
+        List<Crate> crates = new ArrayList<>();
+        for (Crate crate: this.crates)
+            if (crate.getBottle().getId() == bottle.getId())
+                crates.add(crate);
+        return crates;
+    }
 
 }
