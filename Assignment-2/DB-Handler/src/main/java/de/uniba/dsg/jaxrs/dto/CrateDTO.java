@@ -17,7 +17,7 @@ public class CrateDTO {
     private int noOfBottles;
     private double price;
     private int inStock;
-    private URI href;
+    //private URI href;
 
 
     public int getId() {
@@ -60,13 +60,13 @@ public class CrateDTO {
         this.id = id;
     }
 
-    public URI getHref() {
-        return href;
-    }
-
-    public void setHref(URI href) {
-        this.href = href;
-    }
+//    public URI getHref() {
+//        return href;
+//    }
+//
+//    public void setHref(URI href) {
+//        this.href = href;
+//    }
 
     public CrateDTO(){
 
@@ -78,7 +78,7 @@ public class CrateDTO {
         this.noOfBottles = bt.getNoOfBottles();
         this.price = bt.getBottle().getPrice() * bt.getNoOfBottles();
         this.inStock = bt.getInStock();
-        this.href = null;//UriBuilder.fromUri(baseUri).path(BeverageResource.class).path(BeverageResource.class, "getCrateById").build("crate?crateId=",this.id);
+      //  this.href = null;//UriBuilder.fromUri(baseUri).path(BeverageResource.class).path(BeverageResource.class, "getCrateById").build("crate?crateId=",this.id);
     }
 
     public static List<CrateDTO> marshall(final List<Crate> btlList, final URI baseUri) {

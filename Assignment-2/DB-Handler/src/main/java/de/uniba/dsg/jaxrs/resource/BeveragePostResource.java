@@ -58,7 +58,7 @@ public class BeveragePostResource {
 
         logger.info("Crate created");
 
-        return Response.status(Response.Status.CREATED).build();
+        return Response.status(Response.Status.CREATED).entity("Successfully created").build();
     }
 
 }
