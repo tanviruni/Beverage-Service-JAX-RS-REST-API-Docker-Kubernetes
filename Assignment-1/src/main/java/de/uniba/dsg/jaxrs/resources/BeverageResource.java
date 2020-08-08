@@ -82,7 +82,7 @@ public class BeverageResource {
 
     @GET
     @Path("bottlePriceByrange")
-    public Response bottlePriceByrange( @QueryParam("minValue") final double min,@QueryParam("maxValue") final double max, @Context final UriInfo uriInfo) {
+    public Response bottlePriceByrange( @QueryParam("minValue") @DefaultValue("0") final double min,@QueryParam("maxValue") @DefaultValue("99999") final double max, @Context final UriInfo uriInfo) {
         logger.info("Get all bottles in range");
 
         List<Bottle> bt = BeverageService.instance.getAllBottles();
@@ -103,7 +103,7 @@ public class BeverageResource {
 
     @GET
     @Path("cratePriceByrange")
-    public Response cratePriceByrange( @QueryParam("minValue") final double min,@QueryParam("maxValue") final double max, @Context final UriInfo uriInfo) {
+    public Response cratePriceByrange( @QueryParam("minValue")@DefaultValue("0") final double min,@QueryParam("maxValue")@DefaultValue("99999") final double max, @Context final UriInfo uriInfo) {
         logger.info("Get all crates in range");
 
         List<Crate> bt = BeverageService.instance.getAllCrates();
