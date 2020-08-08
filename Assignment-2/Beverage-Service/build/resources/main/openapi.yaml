@@ -1,0 +1,383 @@
+openapi: 3.0.1
+info:
+  title: Sample API
+  description: API description in Markdown.
+  version: 1.0.0
+servers:
+  - url: 'http://localhost:9999/v1'
+
+components:
+  # data elements (JSON Schema)
+  schemas:
+    bottleDTO:
+      type: object
+      required:
+        - name
+      properties:
+        id:
+          type: number
+        name:
+          type: string
+        volumn:
+          type: number
+        isAlcoholic:
+          type: boolean
+        volumePercent:
+          type: number
+        price:
+          type: number
+        supplier:
+          type: string
+        inStock:
+          type: number
+        href:
+          type: string
+    bottleUpdateDTO:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+        volumn:
+          type: number
+        isAlcoholic:
+          type: boolean
+        volumePercent:
+          type: number
+        price:
+          type: number
+        supplier:
+          type: string
+        inStock:
+          type: number
+    errorMessage:
+      type: object
+      required:
+        - errorType
+      properties:
+        errorType:
+          description: error category, should be extended
+          enum:
+            - INVALID_PARAMETER
+        message:
+          type: string
+          description: A detailed error description
+
+    CrateDTO:
+      type: object
+      properties:
+        id:
+          type: number
+        bottle:
+          type: object
+        noOfBottles:
+          type: number
+        price:
+          type: number
+        inStock:
+          type: number
+    CrateUpdateDTO:
+      type: object
+      required:
+        - name
+      properties:
+        bottle:
+          type: object
+        noOfBottles:
+          type: number
+        price:
+          type: number
+        inStock:
+          type: number
+    beverageType:
+      type: string
+      enum: [BOTTLE_TYPE, CRATE_TYPE]
+
+    status:
+      type: string
+      enum: [SUBMITTED, PROCESSED]
+
+    OrderItemDTO:
+      type: object
+      properties:
+        orderNumber:
+          type: number
+        quantity:
+          type: number
+        type:
+          $ref: "#/components/schemas/beverageType"
+        beverageId:
+          type: number
+        price:
+          type: number
+        href:
+          type: string
+
+    OrderDTO:
+      type: object
+      properties:
+        id:
+          type: number
+        price:
+          type: number
+        status:
+          $ref: "#/components/schemas/status"
+        positions:
+          type: array
+          items:
+            $ref: "#/components/schemas/OrderItemDTO"
+
+    orderUpdateDTO:
+      type: object
+      properties:
+        status:
+          $ref: "#/components/schemas/status"
+        positions:
+          type: array
+          items:
+            $ref: "#/components/schemas/OrderItemDTO"
+
+paths:
+
+  /beverage/bottles:
+    get:
+      summary: Get all bottles (no pagination)
+      responses:
+        200:
+          description: Get all bottles without pagination
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/bottleDTO"
+
+  /beverage/bottlePriceByrange:
+    get:
+      summary: Get all bottles by range
+      parameters:
+        - name: minValue
+          required: true
+          in: query
+          schema:
+            type: number
+
+        - name: maxValue
+          required: true
+          in: query
+          schema:
+            type: number
+      responses:
+        200:
+          description: Get all bottles by range
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/bottleDTO"
+
+  /beverage/cratePriceByrange:
+    get:
+      summary: Get all crats by range
+      parameters:
+        - name: minValue
+          required: true
+          in: query
+          schema:
+            type: number
+
+        - name: maxValue
+          required: true
+          in: query
+          schema:
+            type: number
+      responses:
+        200:
+          description: Get all crats by range
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CrateDTO"
+
+
+  /beverage/addBottle:
+    post:
+      summary: Create a bottle
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/bottleDTO"
+      responses:
+        201:
+          description: Bottle created
+        400:
+          description: Message body was empty
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/errorMessage"
+  /beverage/bottle/{bottleId}:
+    parameters:
+      - name: bottleId
+        # path parameters must be always mandatory!!
+        required: true
+        in: path
+        schema:
+          type: number
+    put:
+      summary: Update specific bottle
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/bottleUpdateDTO"
+      responses:
+        200:
+          description: Updating a bottle
+          content:
+            application/*:
+              # response schema
+              schema:
+                $ref: "#/components/schemas/bottleDTO"
+        400:
+          description: Message body was empty
+          content:
+            application/*:
+              schema:
+                $ref: "#/components/schemas/errorMessage"
+        404:
+          description: Not found
+
+  /beverage/crates:
+    get:
+      summary: Get all crates (no pagination)
+      responses:
+        200:
+          description: Get all crates without pagination
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CrateDTO"
+  /beverage/addCrates:
+    post:
+      summary: Add a crate
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CrateDTO"
+      responses:
+        '201':
+          description: Created  new beverage crate
+        '400':
+          description: Message body was empty
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CrateDTO'
+  /beverage/editCrate/{crate-id}:
+    parameters:
+      - name: crate-id
+        required: true
+        in: path
+        schema:
+          type: number
+    put:
+      summary: edit a crate
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CrateUpdateDTO"
+      responses:
+        '201':
+          description: Updated crate
+          content:
+            application/*:
+              # response schema
+              schema:
+                $ref: '#/components/schemas/CrateDTO'
+        '400':
+          description: Message body was empty
+          content:
+            application/*:
+              # response schema
+              schema:
+                $ref: '#/components/schemas/errorMessage'
+        '404':
+          description: Not found
+  /orders/orderList:
+    get:
+      summary: Get all Orders (no pagination)
+      responses:
+        200:
+          description: Get all Orders without pagination
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/OrderDTO"
+
+
+
+  /orders/addOrder:
+    post:
+      summary: Create a order
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrderDTO"
+      responses:
+        201:
+          description: Order created
+        400:
+          description: Message body was empty
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/errorMessage"
+
+  /orders/editOrder/{id}:
+    parameters:
+      - name: id
+        # path parameters must be always mandatory!!
+        required: true
+        in: path
+        schema:
+          type: number
+    put:
+      summary: Update specific order
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/orderUpdateDTO"
+      responses:
+        200:
+          description: Updating a order
+          content:
+            application/*:
+              # response schema
+              schema:
+                $ref: "#/components/schemas/OrderDTO"
+        400:
+          description: Message body was empty
+          content:
+            application/*:
+              schema:
+                $ref: "#/components/schemas/errorMessage"
+        404:
+          description: Not found
+
