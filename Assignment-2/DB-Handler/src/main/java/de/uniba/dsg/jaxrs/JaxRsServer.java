@@ -25,8 +25,8 @@ public class JaxRsServer {
         System.out.println("Server ready to serve your JAX-RS requests...");
         System.out.println("Press any key to exit...");
         System.in.read();
-        System.out.println("Stopping server");
-        server.stop(1);
+
+
 
     }
 }
