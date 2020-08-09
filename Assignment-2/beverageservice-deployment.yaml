@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bev-d-f
+  labels:
+    app: bev-f
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bev-f
+  template:
+    metadata:
+      labels:
+        app: bev-f
+    spec:
+      containers:
+        - name: beverage
+          image: assignment-2_beverage
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: DB_ENV
+              value: http://dbhandler:9999/
+            - name: SERVER_URI
+              value: http://localhost:8080/
+          ports:
+            - containerPort: 8080
+

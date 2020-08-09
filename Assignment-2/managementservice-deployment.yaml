@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: man-d-f
+  labels:
+    app: man-f
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: man-f
+  template:
+    metadata:
+      labels:
+        app: man-f
+    spec:
+      containers:
+        - name: management
+          image: assignment-2_management
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: DB_ENV
+              value: http://dbhandler:9999/
+            - name: SERVER_URI
+              value: http://localhost:8090/
+          ports:
+            - containerPort: 8090
+

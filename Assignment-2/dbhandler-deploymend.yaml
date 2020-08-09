@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: db-d-b
+  labels:
+    app: db-b
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: db-b
+  template:
+    metadata:
+      labels:
+        app: db-b
+    spec:
+      containers:
+        - name: db
+          image: assignment-2_db_handler
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 9999
