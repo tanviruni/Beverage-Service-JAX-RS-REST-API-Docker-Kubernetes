@@ -1,8 +1,6 @@
 package de.uniba.dsg.jaxrs.dto;
 import de.uniba.dsg.jaxrs.model.Bottle;
-import de.uniba.dsg.jaxrs.resource.BeverageResource;
 
-import javax.ws.rs.core.UriBuilder;
 import javax.xml.bind.annotation.*;
 import java.net.URI;
 import java.util.ArrayList;
@@ -10,7 +8,7 @@ import java.util.List;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "bottle")
-@XmlType(propOrder = {"id", "name", "volume", "isAlcoholic", "volumePercent", "price","supplier","inStock","href"})
+@XmlType(propOrder = {"id", "name", "volume", "isAlcoholic", "volumePercent", "price","supplier","inStock"})
 public class BottleDTO {
     private int id;
     @XmlElement(required = true)
@@ -27,7 +25,7 @@ public class BottleDTO {
     private String supplier;
     @XmlElement(required = true)
     private int inStock;
-    private URI href;
+    //private URI href;
 
 
     public int getId() {
@@ -98,7 +96,7 @@ public class BottleDTO {
 
     }
 
-    public BottleDTO(final Bottle bt, final URI baseUri) {
+    public BottleDTO(final Bottle bt) {
         this.id = bt.getId();
         this.name = bt.getName();
         this.volume = bt.getVolume();
@@ -107,13 +105,13 @@ public class BottleDTO {
         this.price = bt.getPrice();
         this.supplier = bt.getSupplier();
         this.inStock = bt.getInStock();
-        this.href = null;//UriBuilder.fromUri(baseUri).path(BeverageResource.class).path(BeverageResource.class, "getBottleById").build("bottle?bottleId=",this.id);
+        //this.href = null;//UriBuilder.fromUri(baseUri).path(BeverageResource.class).path(BeverageResource.class, "getBottleById").build("bottle?bottleId=",this.id);
     }
 
     public static List<BottleDTO> marshall(final List<Bottle> btlList, final URI baseUri) {
         final ArrayList<BottleDTO> btl = new ArrayList<>();
         for (final Bottle m : btlList) {
-            btl.add(new BottleDTO(m,baseUri));
+            btl.add(new BottleDTO(m));
         }
         return btl;
     }
@@ -133,7 +131,7 @@ public class BottleDTO {
                 ", price='" + this.price +
                 ", supplier='" + this.supplier +
                 ", inStock=" + this.inStock +
-                ", href=" + this.href +
+                //", href=" + this.href +
                 '}';
     }
 

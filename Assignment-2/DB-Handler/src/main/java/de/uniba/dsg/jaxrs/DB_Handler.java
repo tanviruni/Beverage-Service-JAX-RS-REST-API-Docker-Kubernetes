@@ -10,19 +10,21 @@ import de.uniba.dsg.jaxrs.model.Crate;
 
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 import java.util.logging.Logger;
 
 public class DB_Handler {
+    public static final DB_Handler instance;// = new DB_Handler();
     private static Properties properties = Configuration.loadProperties();
     private static final Logger logger = Logger.getLogger("DB_Handler");
     private File dbFileBottle;
     private File dbFileCrate;
     private List<Bottle> bottles;
     private List<Crate> crates;
+
+    static {
+        instance = new DB_Handler();
+    }
 
     public DB_Handler(){
         this.dbFileBottle = new File(properties.getProperty("bottleFile"));
@@ -69,15 +71,6 @@ public class DB_Handler {
         return this.crates;
     }
 
-    public Crate getCrate(int crateId){
-        Crate crate = null;
-
-        for(Crate c: this.crates)
-            if (c.getId() == crateId)
-                return c;
-        return crate;
-    }
-
     public Bottle getBottle(int bottleId){
         Bottle bottle = null;
 
@@ -85,6 +78,15 @@ public class DB_Handler {
             if (b.getId() == bottleId)
                 return b;
         return bottle;
+    }
+
+    public Crate getCrate(int crateId){
+        Crate crate = null;
+
+        for(Crate c: this.crates)
+            if (c.getId() == crateId)
+                return c;
+        return crate;
     }
 
     public void insertBottle(Bottle bottle){
@@ -95,8 +97,43 @@ public class DB_Handler {
 
     public void insertCrate(Crate crate){
         crate.setId(this.crates.stream().map(Crate::getId).max(Comparator.naturalOrder()).orElse(0) + 1);
+        crate.setPrice(crate.getBottle().getPrice()*crate.getNoOfBottles());
         this.crates.add(crate);
+        System.out.println(crate);
         this.persistCrates();
+    }
+
+    public void deleteBottle(Bottle bottle){
+        this.bottles.remove(bottle);
+        this.persistBottles();
+    }
+
+    public void deleteCrate(Crate crate){
+        this.crates.remove(crate);
+        this.persistCrates();
+    }
+
+    public void updateBottle(final Bottle updatedBottle) {
+        Bottle btl = this.getBottle(updatedBottle.getId());
+        btl.setName(updatedBottle.getName());
+        btl.setInStock(updatedBottle.getInStock());
+        btl.setAlcoholic(updatedBottle.isAlcoholic());
+        btl.setPrice(updatedBottle.getPrice());
+        btl.setSupplier(updatedBottle.getSupplier());
+        btl.setVolume(updatedBottle.getVolume());
+        btl.setVolumePercent(updatedBottle.getVolumePercent());
+
+        this.persistBottles();
+    }
+
+    public void updateCrate(final Crate updatedCrate) {
+        Crate crt = this.getCrate(updatedCrate.getId());
+        crt.setInStock(updatedCrate.getInStock());
+        crt.setPrice(updatedCrate.getPrice());
+        crt.setBottle(updatedCrate.getBottle());
+        crt.setNoOfBottles(updatedCrate.getNoOfBottles());
+
+        this.persistBottles();
     }
 
     private void persistBottles(){
@@ -172,7 +209,6 @@ public class DB_Handler {
         return bottles;
     }
 
-
     private List<Crate> readAllCratesFromDB(){
 
         List <Crate> crates = new ArrayList<>();
@@ -198,6 +234,12 @@ public class DB_Handler {
         return crates;
     }
 
-
+    public List<Crate> searchCratesWithBottle(Bottle bottle){
+        List<Crate> crates = new ArrayList<>();
+        for (Crate crate: this.crates)
+            if (crate.getBottle().getId() == bottle.getId())
+                crates.add(crate);
+        return crates;
+    }
 
 }

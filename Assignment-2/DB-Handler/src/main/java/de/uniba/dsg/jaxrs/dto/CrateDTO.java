@@ -1,9 +1,7 @@
 package de.uniba.dsg.jaxrs.dto;
 import de.uniba.dsg.jaxrs.model.Bottle;
 import de.uniba.dsg.jaxrs.model.Crate;
-import de.uniba.dsg.jaxrs.resource.BeverageResource;
 
-import javax.ws.rs.core.UriBuilder;
 import javax.xml.bind.annotation.*;
 import java.net.URI;
 import java.util.ArrayList;
@@ -11,7 +9,7 @@ import java.util.List;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "crate")
-@XmlType(propOrder = {"id","bottle","noOfBottles","price","inStock","href"})
+@XmlType(propOrder = {"id","bottle","noOfBottles","price","inStock"})
 public class CrateDTO {
     private int id;
     @XmlElement(required = true)
@@ -19,7 +17,7 @@ public class CrateDTO {
     private int noOfBottles;
     private double price;
     private int inStock;
-    private URI href;
+    //private URI href;
 
 
     public int getId() {
@@ -58,23 +56,35 @@ public class CrateDTO {
         this.inStock = inStock;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
+//    public URI getHref() {
+//        return href;
+//    }
+//
+//    public void setHref(URI href) {
+//        this.href = href;
+//    }
+
     public CrateDTO(){
 
     }
 
-    public CrateDTO(final Crate bt, final URI baseUri) {
+    public CrateDTO(final Crate bt) {
         this.id = bt.getId();
         this.bottle = bt.getBottle();
         this.noOfBottles = bt.getNoOfBottles();
         this.price = bt.getBottle().getPrice() * bt.getNoOfBottles();
         this.inStock = bt.getInStock();
-        this.href = null;//UriBuilder.fromUri(baseUri).path(BeverageResource.class).path(BeverageResource.class, "getCrateById").build("crate?crateId=",this.id);
+      //  this.href = null;//UriBuilder.fromUri(baseUri).path(BeverageResource.class).path(BeverageResource.class, "getCrateById").build("crate?crateId=",this.id);
     }
 
     public static List<CrateDTO> marshall(final List<Crate> btlList, final URI baseUri) {
         final ArrayList<CrateDTO> btl = new ArrayList<>();
         for (final Crate m : btlList) {
-            btl.add(new CrateDTO(m,baseUri));
+            btl.add(new CrateDTO(m));
         }
         return btl;
     }
@@ -91,7 +101,7 @@ public class CrateDTO {
                 ", noOfBottles='" + this.noOfBottles +
                 ", price='" + this.price +
                 ", inStock=" + this.inStock +
-                ", href=" + this.href +
+                //", href=" + this.href +
                 '}';
     }
 
