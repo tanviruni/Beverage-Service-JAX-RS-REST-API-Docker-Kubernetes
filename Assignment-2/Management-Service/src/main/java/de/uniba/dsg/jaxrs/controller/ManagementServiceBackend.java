@@ -2,9 +2,12 @@ package de.uniba.dsg.jaxrs.controller;
 
 import de.uniba.dsg.jaxrs.Configuration;
 import de.uniba.dsg.jaxrs.dto.BottleDTO;
+import de.uniba.dsg.jaxrs.dto.BottleUpdateDTO;
 import de.uniba.dsg.jaxrs.dto.CrateDTO;
+import de.uniba.dsg.jaxrs.dto.CrateUpdateDTO;
 import de.uniba.dsg.jaxrs.model.Bottle;
 import de.uniba.dsg.jaxrs.model.Crate;
+import de.uniba.dsg.jaxrs.resource.ManagementResource;
 
 import javax.ws.rs.ProcessingException;
 import javax.ws.rs.client.Client;
@@ -197,6 +200,51 @@ public class ManagementServiceBackend {
             });
         } else {
             log.info("Error in deleting bottle from DB-Handler Status code " + response.getStatus());
+        }
+
+        return null;
+    }
+
+    public Response updateCrate(final int crateId, final CrateUpdateDTO crateUpdateDTO) throws ProcessingException {
+
+        if (crateUpdateDTO == null) {
+            //  return Response.status(Response.Status.BAD_REQUEST).entity(new ErrorMessage(ErrorType.INVALID_PARAMETER, "Body was empty")).build();
+        }
+
+        Entity<CrateUpdateDTO> entity = Entity.json(crateUpdateDTO);
+        Client client = ClientBuilder.newClient();
+        Response response = client.target(this.uri)
+                .path("/beverage/editCrate/" + crateId + "") // http://localhost:9999/v1/beverage/editBottle
+                .request(MediaType.APPLICATION_JSON)
+                .put(entity);
+
+        if (response.getStatus() == 200) {
+            return Response.ok().entity("Successfully updated").build();
+        } else {
+            log.info("Error in updating crate from DB-Handler Status code " + response.getStatus());
+        }
+
+        return null;
+    }
+
+
+    public Response updateBottle(final int bottleId, final BottleUpdateDTO bottleUpdateDTO) throws ProcessingException {
+
+        if (bottleUpdateDTO == null) {
+            //  return Response.status(Response.Status.BAD_REQUEST).entity(new ErrorMessage(ErrorType.INVALID_PARAMETER, "Body was empty")).build();
+        }
+
+        Entity<BottleUpdateDTO> entity = Entity.json(bottleUpdateDTO);
+        Client client = ClientBuilder.newClient();
+        Response response = client.target(this.uri)
+                .path("/beverage/editBottle/" + bottleId + "") // http://localhost:9999/v1/beverage/editBottle
+                .request(MediaType.APPLICATION_JSON)
+                .put(entity);
+
+        if (response.getStatus() == 200) {
+            return Response.ok().entity("Successfully updated").build();
+        } else {
+            log.info("Error in updating bottle from DB-Handler Status code " + response.getStatus());
         }
 
         return null;

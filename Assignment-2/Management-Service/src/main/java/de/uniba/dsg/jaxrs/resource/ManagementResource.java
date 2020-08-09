@@ -3,9 +3,7 @@ package de.uniba.dsg.jaxrs.resource;
 
 import de.uniba.dsg.jaxrs.Configuration;
 import de.uniba.dsg.jaxrs.controller.ManagementServiceBackend;
-import de.uniba.dsg.jaxrs.dto.BeveragesDTO;
-import de.uniba.dsg.jaxrs.dto.BottleDTO;
-import de.uniba.dsg.jaxrs.dto.CrateDTO;
+import de.uniba.dsg.jaxrs.dto.*;
 import de.uniba.dsg.jaxrs.model.Bottle;
 import de.uniba.dsg.jaxrs.model.Crate;
 
@@ -159,4 +157,42 @@ public class ManagementResource {
         }
     }
 
+
+    @PUT
+    @Path("updateCrate")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response updateCrate(@QueryParam("carateId") final int carateId, final CrateUpdateDTO crateUpdateDTO, @Context final UriInfo uriInfo) {
+        logger.info("Update a crate in DB: " + crateUpdateDTO);
+
+        if (crateUpdateDTO == null) {
+            //    return Response.status(Response.Status.BAD_REQUEST).entity(new ErrorMessage(ErrorType.INVALID_PARAMETER, "Body was empty")).build();
+        }
+        ManagementServiceBackend backend = new ManagementServiceBackend(Configuration.loadProperties().getProperty("remoteUri"));
+
+         backend.updateCrate(carateId,crateUpdateDTO);
+
+
+        Response build = Response.ok().build();
+        return build;
+
+    }
+
+    @PUT
+    @Path("updatebottle")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response updateBottle(@QueryParam("bottleId") final int bottleId, final BottleUpdateDTO bottleUpdateDTO, @Context final UriInfo uriInfo) {
+        logger.info("Update a bottle in DB: " + bottleUpdateDTO);
+
+        if (bottleUpdateDTO == null) {
+            //    return Response.status(Response.Status.BAD_REQUEST).entity(new ErrorMessage(ErrorType.INVALID_PARAMETER, "Body was empty")).build();
+        }
+        ManagementServiceBackend backend = new ManagementServiceBackend(Configuration.loadProperties().getProperty("remoteUri"));
+
+       backend.updateBottle(bottleId,bottleUpdateDTO);
+
+
+        Response build = Response.ok().build();
+        return build;
+
+    }
 }
