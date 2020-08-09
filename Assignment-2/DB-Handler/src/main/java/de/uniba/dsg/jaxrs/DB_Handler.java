@@ -10,10 +10,7 @@ import de.uniba.dsg.jaxrs.model.Crate;
 
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 import java.util.logging.Logger;
 
 public class DB_Handler {
@@ -114,6 +111,29 @@ public class DB_Handler {
     public void deleteCrate(Crate crate){
         this.crates.remove(crate);
         this.persistCrates();
+    }
+
+    public void updateBottle(final Bottle updatedBottle) {
+        Bottle btl = this.getBottle(updatedBottle.getId());
+        btl.setName(updatedBottle.getName());
+        btl.setInStock(updatedBottle.getInStock());
+        btl.setAlcoholic(updatedBottle.isAlcoholic());
+        btl.setPrice(updatedBottle.getPrice());
+        btl.setSupplier(updatedBottle.getSupplier());
+        btl.setVolume(updatedBottle.getVolume());
+        btl.setVolumePercent(updatedBottle.getVolumePercent());
+
+        this.persistBottles();
+    }
+
+    public void updateCrate(final Crate updatedCrate) {
+        Crate crt = this.getCrate(updatedCrate.getId());
+        crt.setInStock(updatedCrate.getInStock());
+        crt.setPrice(updatedCrate.getPrice());
+        crt.setBottle(updatedCrate.getBottle());
+        crt.setNoOfBottles(updatedCrate.getNoOfBottles());
+
+        this.persistBottles();
     }
 
     private void persistBottles(){

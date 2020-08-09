@@ -4,6 +4,7 @@ import de.uniba.dsg.jaxrs.controller.BeverageDeleteService;
 import de.uniba.dsg.jaxrs.resource.BeverageDeleteResource;
 import de.uniba.dsg.jaxrs.resource.BeverageGetResource;
 import de.uniba.dsg.jaxrs.resource.BeveragePostResource;
+import de.uniba.dsg.jaxrs.resource.BeveragePutResource;
 
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.Consumes;
@@ -23,6 +24,7 @@ public class ExamplesApi extends Application {
         resources.add(BeverageGetResource.class);
         resources.add(BeveragePostResource.class);
         resources.add(BeverageDeleteResource.class);
+        resources.add(BeveragePutResource.class);
         return resources;
     }
 }
