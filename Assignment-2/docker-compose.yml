@@ -1,6 +1,6 @@
 version: '3'
 services:
-  web:
+  beverage:
     build: Beverage-Service
 
     ports:
@@ -9,7 +9,15 @@ services:
       - a-net
     depends_on:
       - "db"
+  management:
+    build: Management-Service
 
+    ports:
+      - "8090:8090"
+    networks:
+      - a-net
+    depends_on:
+      - "db"
 
   db:
     build: DB-Handler

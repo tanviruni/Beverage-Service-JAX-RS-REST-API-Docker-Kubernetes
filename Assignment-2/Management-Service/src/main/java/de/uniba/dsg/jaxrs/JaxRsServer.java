@@ -21,9 +21,7 @@ public class JaxRsServer {
         HttpServer server = JdkHttpServerFactory.createHttpServer(baseUri, config);
         System.out.println("Management-Service server ready to serve your JAX-RS requests...");
         System.out.println("Press any key to exit...");
-        System.in.read();
-        System.out.println("Stopping server");
-        server.stop(1);
+
 
     }
 }
