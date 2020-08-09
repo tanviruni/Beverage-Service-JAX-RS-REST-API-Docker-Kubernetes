@@ -28,17 +28,7 @@
     </select>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="863f020f-9c1c-4f67-baf0-d8a917b7ce95" name="Default Changelist" comment="final commitsdfd">
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_cliftonlabs_json_simple_3_1_0.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_sun_activation_jakarta_activation_1_2_2.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_sun_istack_istack_commons_runtime_3_0_11.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__jakarta_activation_jakarta_activation_api_1_2_2.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__jakarta_xml_bind_jakarta_xml_bind_api_2_3_3.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_glassfish_jaxb_jaxb_runtime_2_3_3.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_glassfish_jaxb_txw2_2_3_3.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="863f020f-9c1c-4f67-baf0-d8a917b7ce95" name="Default Changelist" comment="final commitsdfd" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -303,6 +293,7 @@
       <workItem from="1596824061687" duration="5315000" />
       <workItem from="1596829463271" duration="174000" />
       <workItem from="1596877486965" duration="628000" />
+      <workItem from="1596981851068" duration="279000" />
     </task>
     <task id="LOCAL-00001" summary="test">
       <created>1593345838452</created>

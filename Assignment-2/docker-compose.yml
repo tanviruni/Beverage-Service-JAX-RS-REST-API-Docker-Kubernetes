@@ -2,23 +2,20 @@ version: '3'
 services:
   web:
     build: Beverage-Service
-    restart: always
+
     ports:
-      - "8090:8080"
+      - "8080:8080"
     networks:
       - a-net
     depends_on:
-      - db
-    volumes:
-      - a-vol:/data
+      - "db"
+
 
   db:
     build: DB-Handler
     networks:
       - a-net
 
-volumes:
-  a-vol:
 networks:
   a-net:
     driver: bridge
