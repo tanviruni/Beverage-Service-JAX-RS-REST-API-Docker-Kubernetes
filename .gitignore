@@ -1,8 +1,14 @@
 /Assignment-2/Management-Service/.idea/
 /Assignment-2/Management-Service/build/
+/Assignment-2/Management-Service/.gradle/
 
 /Assignment-2/DB-Handler/.idea/
 /Assignment-2/DB-Handler/build/
+/Assignment-2/DB-Handler/.gradle/
 
 /Assignment-2/Beverage-Service/.idea/
 /Assignment-2/Beverage-Service/build/
+/Assignment-2/Beverage-Service/.gradle/
+
+/.gradle/
+/.idea/
