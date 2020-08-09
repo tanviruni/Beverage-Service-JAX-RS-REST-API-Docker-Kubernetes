@@ -25,10 +25,10 @@ public class JaxRsServer {
         ResourceConfig config = ResourceConfig.forApplicationClass(ExamplesApi.class);
         HttpServer server = JdkHttpServerFactory.createHttpServer(baseUri, config);
         System.out.println("Beverage-Service server ready to serve your JAX-RS requests...");
-        System.out.println("Press any key to exit...");
-        System.in.read();
-        System.out.println("Stopping server");
-        server.stop(1);
+//        System.out.println("Press any key to exit...");
+//        System.in.read();
+//        System.out.println("Stopping server");
+//        server.stop(1);
 
     }
 }

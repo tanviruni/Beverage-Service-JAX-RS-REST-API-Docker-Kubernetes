@@ -23,11 +23,11 @@ public class JaxRsServer {
         URI baseUri = UriBuilder.fromUri(serverUri).build();
         ResourceConfig config = ResourceConfig.forApplicationClass(ExamplesApi.class);
         HttpServer server = JdkHttpServerFactory.createHttpServer(baseUri, config);
-        System.out.println("DB-Handler server is ready to serve JAX-RS requests...");
-        System.out.println("Press any key to exit...");
-        System.in.read();
-        System.out.println("Stopping server");
-        server.stop(1);
+//        System.out.println("DB-Handler server is ready to serve JAX-RS requests...");
+//        System.out.println("Press any key to exit...");
+//        System.in.read();
+//        System.out.println("Stopping server");
+//        server.stop(1);
 
     }
 }

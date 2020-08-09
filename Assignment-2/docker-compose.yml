@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  beverage:
+    build:
+      context: Beverage-Service
+    networks:
+      - beverage-net
+    depends_on:
+      - db_handler
+    ports:
+      - "8080:8080"  
+
+  
+  db_handler:
+    build:
+      context: DB-Handler
+    networks:
+      - beverage-net
+    ports:
+      - "9999:9999"
+
+networks:
+  beverage-net:
+
+ 
