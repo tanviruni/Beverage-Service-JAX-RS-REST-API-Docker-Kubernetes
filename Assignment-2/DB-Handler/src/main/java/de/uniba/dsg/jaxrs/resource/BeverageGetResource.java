@@ -22,12 +22,11 @@ public class BeverageGetResource {
     @GET
     @Path("bottles")
     @Produces({MediaType.APPLICATION_JSON})
-    public Response getBottles(@Context final UriInfo uriInfo,
-                               @QueryParam("pageLimit") @DefaultValue("10") final int pageLimit,
-                               @QueryParam("page") @DefaultValue("1") final int page) {
-        logger.info("Get all bottles. Pagination parameter: page-\" + page + \" pageLimit-\" + pageLimit");
-
-        final GenericEntity<List<BottleDTO>> entity = new GenericEntity<List<BottleDTO>>(BottleDTO.marshall(BeverageGetService.instance.getAllBottles() , uriInfo.getBaseUri())){
+    public Response getBottles() {
+        logger.info("Get all bottles. ");
+        List<Bottle> bottles=BeverageGetService.instance.getAllBottles();
+        List<BottleDTO> dtos = BottleDTO.marshall( bottles, null);
+        final GenericEntity<List<BottleDTO>> entity = new GenericEntity<List<BottleDTO>>(dtos){
         };
 
         Response build = Response.ok(entity).build();
@@ -39,13 +38,11 @@ public class BeverageGetResource {
     @GET
     @Path("crates")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getCrates(@Context final UriInfo uriInfo,
-                              @QueryParam("pageLimit") @DefaultValue("10") final int pageLimit,
-                              @QueryParam("page") @DefaultValue("1") final int page) {
-        logger.info("Get all crates. Pagination parameter: page-\" + page + \" pageLimit-\" + pageLimit");
+    public Response getCrates() {
+        logger.info("Get all crates.");
 
         List <Crate> crates = BeverageGetService.instance.getAllCrates();
-        List<CrateDTO> dtos = CrateDTO.marshall(crates, uriInfo.getBaseUri());
+        List<CrateDTO> dtos = CrateDTO.marshall(crates, null);
         final GenericEntity<List<CrateDTO>> entity = new GenericEntity<List<CrateDTO>>(dtos){
         };
 

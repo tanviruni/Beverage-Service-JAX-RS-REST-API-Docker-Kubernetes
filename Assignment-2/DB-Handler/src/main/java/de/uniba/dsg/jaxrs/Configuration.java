@@ -18,4 +18,16 @@ public class Configuration {
             return null;
         }
     }
+
+    public static String getServerUri() {
+        String serverUri = System.getenv("SERVER_URI");
+
+        if (serverUri == null || serverUri.isEmpty()) {
+            serverUri = loadProperties().getProperty("serverUri");
+        }
+
+        return serverUri;
+    }
+
+
 }

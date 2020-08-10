@@ -24,12 +24,10 @@ public class BeverageResource {
     @GET
     @Path("all")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getBeverages(@Context final UriInfo uriInfo,
-                                     @QueryParam("pageLimit") @DefaultValue("10") final int pageLimit,
-                                     @QueryParam("page") @DefaultValue("1") final int page) {
-        logger.info("Get all beverages. Pagination parameter: page-\" + page + \" pageLimit-\" + pageLimit");
+    public Response getBeverages() {
+        logger.info("Get all beverages. ");
 
-        BeverageServiceBackend backend = new BeverageServiceBackend(Configuration.loadProperties().getProperty("remoteUri"));
+        BeverageServiceBackend backend = new BeverageServiceBackend(Configuration.getDBHandlerUri());
         try{
             List<Bottle> bottles = backend.getBottles();
             List<Crate> crates = backend.getCrates();

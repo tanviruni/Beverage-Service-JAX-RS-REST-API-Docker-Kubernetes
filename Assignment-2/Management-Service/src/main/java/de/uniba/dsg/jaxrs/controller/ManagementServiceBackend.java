@@ -1,10 +1,7 @@
 package de.uniba.dsg.jaxrs.controller;
 
 import de.uniba.dsg.jaxrs.Configuration;
-import de.uniba.dsg.jaxrs.dto.BottleDTO;
-import de.uniba.dsg.jaxrs.dto.BottleUpdateDTO;
-import de.uniba.dsg.jaxrs.dto.CrateDTO;
-import de.uniba.dsg.jaxrs.dto.CrateUpdateDTO;
+import de.uniba.dsg.jaxrs.dto.*;
 import de.uniba.dsg.jaxrs.model.Bottle;
 import de.uniba.dsg.jaxrs.model.Crate;
 import de.uniba.dsg.jaxrs.resource.ManagementResource;
@@ -27,6 +24,7 @@ public class ManagementServiceBackend {
 
     private static final Logger log = Logger.getLogger("ManagementServiceBackend");
     private final String uri;
+    public static final ManagementServiceBackend instance = new ManagementServiceBackend(Configuration.getDBHandlerUri());
 
     public ManagementServiceBackend(String uri) {
 
@@ -67,12 +65,13 @@ public class ManagementServiceBackend {
                 .request(MediaType.APPLICATION_JSON)
                 .get();
 
-
-        if (response.getStatus() == 200) {
-            return response.readEntity(new GenericType<Bottle>() {
-            });
-        } else {
-            log.info("Error in  bottle from DB-Handler Status code " + response.getStatus());
+        switch (response.getStatus()){
+            case 200:
+                return response.readEntity(new GenericType<Bottle>() { });
+            case 404:
+                return null;
+            default:
+                log.info("Error in  bottle from DB-Handler Status code " + response.getStatus());
         }
 
         return null;
@@ -85,7 +84,6 @@ public class ManagementServiceBackend {
                 .request(MediaType.APPLICATION_JSON)
                 .get();
 
-
         if (response.getStatus() == 200) {
             return response.readEntity(new GenericType<List<CrateDTO>>() {
             })
@@ -95,10 +93,13 @@ public class ManagementServiceBackend {
                     })
                     .collect(Collectors.toList());
 
-        } else {
+        }else if(response.getStatus() ==  404) {
+            return null;
+        }
+        else {
             log.info("Error in fetching all crates from DB-Handler Status code " + response.getStatus());
         }
-        //System.out.println(returnCat.toString());
+
         List<Crate> list = new ArrayList<>();
         return list;
     }
@@ -115,6 +116,8 @@ public class ManagementServiceBackend {
         if (response.getStatus() == 200) {
             return response.readEntity(new GenericType<Crate>() {
             });
+        }else if(response.getStatus()==404){
+            return null;
         } else {
             log.info("Error in fetching  crate from DB-Handler Status code " + response.getStatus());
         }
@@ -123,53 +126,42 @@ public class ManagementServiceBackend {
     }
 
 
-    public Bottle addBottle(final BottleDTO bottleDTO) throws ProcessingException {
+    public void addBottle(final BottleCreateDTO bottleDTO) throws ProcessingException {
 
-        if (bottleDTO == null) {
-            //  return Response.status(Response.Status.BAD_REQUEST).entity(new ErrorMessage(ErrorType.INVALID_PARAMETER, "Body was empty")).build();
-        }
-
-        Entity<BottleDTO> entity = Entity.json(bottleDTO);
+        Entity<BottleCreateDTO> entity = Entity.json(bottleDTO);
         Client client = ClientBuilder.newClient();
         Response response = client.target(this.uri)
                 .path("/beverage/addBottle") // http://localhost:9999/v1/beverage/addBottle
                 .request(MediaType.APPLICATION_JSON)
                 .post(entity);
 
-        if (response.getStatus() == 200) {
-            return response.readEntity(new GenericType<Bottle>() {
-            });
+        if (response.getStatus() == 201) {
+            log.info("Bottle successfully inserted");
         } else {
-            log.info("Error in adding bottle from DB-Handler Status code " + response.getStatus());
+            log.warning("Error in adding bottle from DB-Handler Status code " + response.getStatus()+" " +response.getEntity());
         }
 
-        return null;
+
     }
 
-    public Crate addCrate(final CrateDTO crateDTO) throws ProcessingException {
+    public void addCrate(final CrateCreateDTO crateDTO) throws ProcessingException {
 
-        if (crateDTO == null) {
-            //  return Response.status(Response.Status.BAD_REQUEST).entity(new ErrorMessage(ErrorType.INVALID_PARAMETER, "Body was empty")).build();
-        }
-
-        Entity<CrateDTO> entity = Entity.json(crateDTO);
+        Entity<CrateCreateDTO> entity = Entity.json(crateDTO);
         Client client = ClientBuilder.newClient();
         Response response = client.target(this.uri)
                 .path("/beverage/addCrate") // http://localhost:9999/v1/beverage/addBottle
                 .request(MediaType.APPLICATION_JSON)
                 .post(entity);
 
-        if (response.getStatus() == 200) {
-            return response.readEntity(new GenericType<Crate>() {
-            });
+        if (response.getStatus() == 201) {
+            log.info("Crate successfully inserted");
         } else {
-            log.info("Error in adding crate from DB-Handler Status code " + response.getStatus());
+            log.warning("Error in adding crate from DB-Handler Status code " + response.getStatus());
         }
 
-        return null;
     }
 
-    public Crate removeCrate(final int crateId) throws ProcessingException {
+    public int removeCrate(final int crateId) throws ProcessingException {
         Client client = ClientBuilder.newClient();
         Response response = client.target(this.uri)
                 .path("/beverage/deleteCrate/" + crateId + "") // http://localhost:9999/v1/beverage/deleteCrate/
@@ -177,17 +169,10 @@ public class ManagementServiceBackend {
                 .delete();
 
 
-        if (response.getStatus() == 200) {
-            return response.readEntity(new GenericType<Crate>() {
-            });
-        } else {
-            log.info("Error in deleting crate from DB-Handler Status code " + response.getStatus());
-        }
-
-        return null;
+        return response.getStatus();
     }
 
-    public Crate removeBottle(final int bottleId) throws ProcessingException {
+    public int removeBottle(final int bottleId) throws ProcessingException {
         Client client = ClientBuilder.newClient();
         Response response = client.target(this.uri)
                 .path("/beverage/deleteBottle/" + bottleId + "") // http://localhost:9999/v1/beverage/deleteBottle/
@@ -195,21 +180,10 @@ public class ManagementServiceBackend {
                 .delete();
 
 
-        if (response.getStatus() == 200) {
-            return response.readEntity(new GenericType<Crate>() {
-            });
-        } else {
-            log.info("Error in deleting bottle from DB-Handler Status code " + response.getStatus());
-        }
-
-        return null;
+        return response.getStatus();
     }
 
-    public Response updateCrate(final int crateId, final CrateUpdateDTO crateUpdateDTO) throws ProcessingException {
-
-        if (crateUpdateDTO == null) {
-            //  return Response.status(Response.Status.BAD_REQUEST).entity(new ErrorMessage(ErrorType.INVALID_PARAMETER, "Body was empty")).build();
-        }
+    public int updateCrate(final int crateId, final CrateUpdateDTO crateUpdateDTO) throws ProcessingException {
 
         Entity<CrateUpdateDTO> entity = Entity.json(crateUpdateDTO);
         Client client = ClientBuilder.newClient();
@@ -218,21 +192,12 @@ public class ManagementServiceBackend {
                 .request(MediaType.APPLICATION_JSON)
                 .put(entity);
 
-        if (response.getStatus() == 200) {
-            return Response.ok().entity("Successfully updated").build();
-        } else {
-            log.info("Error in updating crate from DB-Handler Status code " + response.getStatus());
-        }
 
-        return null;
+        return response.getStatus();
     }
 
 
-    public Response updateBottle(final int bottleId, final BottleUpdateDTO bottleUpdateDTO) throws ProcessingException {
-
-        if (bottleUpdateDTO == null) {
-            //  return Response.status(Response.Status.BAD_REQUEST).entity(new ErrorMessage(ErrorType.INVALID_PARAMETER, "Body was empty")).build();
-        }
+    public int updateBottle(final int bottleId, final BottleUpdateDTO bottleUpdateDTO) throws ProcessingException {
 
         Entity<BottleUpdateDTO> entity = Entity.json(bottleUpdateDTO);
         Client client = ClientBuilder.newClient();
@@ -241,13 +206,8 @@ public class ManagementServiceBackend {
                 .request(MediaType.APPLICATION_JSON)
                 .put(entity);
 
-        if (response.getStatus() == 200) {
-            return Response.ok().entity("Successfully updated").build();
-        } else {
-            log.info("Error in updating bottle from DB-Handler Status code " + response.getStatus());
-        }
 
-        return null;
+        return response.getStatus();
     }
 
 }

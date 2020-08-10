@@ -25,6 +25,10 @@ public class CrateDTO {
         return id;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public Bottle getBottle() {
         return bottle;
     }

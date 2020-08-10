@@ -18,4 +18,24 @@ public class Configuration {
             return null;
         }
     }
+
+    public static String getServerUri() {
+        String serverUri = System.getenv("SERVER_URI");
+
+        if (serverUri == null || serverUri.isEmpty()) {
+            serverUri = loadProperties().getProperty("serverUri");
+        }
+
+        return serverUri;
+    }
+
+    public static String getDBHandlerUri() {
+        String serverUri = System.getenv("DB_HANDLER_URI");
+
+        if (serverUri == null || serverUri.isEmpty()) {
+            serverUri = loadProperties().getProperty("remoteUri");
+        }
+
+        return serverUri;
+    }
 }

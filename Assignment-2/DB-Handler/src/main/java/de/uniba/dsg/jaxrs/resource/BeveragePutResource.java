@@ -51,7 +51,7 @@ public class BeveragePutResource {
         Bottle bl = null;
         if(updatedCrate.getBottleId()!=null)   {
             bl = BeverageGetService.instance.getBottleById(updatedCrate.getBottleId().intValue());
-            if(bl==null) return Response.status(Response.Status.NOT_FOUND).entity((new ErrorMessage(ErrorType.ITEM_NOT_FOUND, "Bottle with id "+updatedCrate.getBottleId()+" not found"))).build();
+            if(bl==null) return Response.status(Response.Status.NOT_ACCEPTABLE).entity((new ErrorMessage(ErrorType.ITEM_NOT_FOUND, "Bottle with id "+updatedCrate.getBottleId()+" not found"))).build();
         }
 
 

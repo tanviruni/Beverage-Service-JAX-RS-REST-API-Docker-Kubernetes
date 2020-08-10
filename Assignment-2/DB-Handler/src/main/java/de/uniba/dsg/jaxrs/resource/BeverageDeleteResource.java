@@ -24,7 +24,7 @@ public class BeverageDeleteResource {
     public Response deleteBottle(@PathParam("bottleId") final int bottleId){
         Bottle bottle = BeverageGetService.instance.getBottleById(bottleId);
 
-        if(bottle==null) return Response.status(Response.Status.NOT_FOUND).entity(new ErrorMessage(ErrorType.ITEM_NOT_FOUND,"Bottle with id "+bottleId+" not found")).build();
+        if(bottle == null) return Response.status(Response.Status.NOT_FOUND).entity(new ErrorMessage(ErrorType.ITEM_NOT_FOUND,"Bottle with id "+bottleId+" not found")).build();
         List<Crate> crates = BeverageDeleteService.instance.searchCratesWithBottle(bottle);
         if(crates.size() > 0){
             String list = "";

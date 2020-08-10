@@ -11,16 +11,14 @@ import org.glassfish.jersey.jdkhttp.JdkHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
 
 public class JaxRsServer {
-    private static Properties properties = Configuration.loadProperties();
 
     public static void main(String[] args) throws IOException {
-        String serverUri = properties.getProperty("serverUri");
+        String serverUri = Configuration.getServerUri();
 
         URI baseUri = UriBuilder.fromUri(serverUri).build();
         ResourceConfig config = ResourceConfig.forApplicationClass(ExamplesApi.class);
         HttpServer server = JdkHttpServerFactory.createHttpServer(baseUri, config);
         System.out.println("Management-Service server ready to serve your JAX-RS requests...");
-        System.out.println("Press any key to exit...");
 
 
     }

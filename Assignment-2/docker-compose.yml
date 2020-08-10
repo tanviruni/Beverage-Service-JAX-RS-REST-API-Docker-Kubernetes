@@ -9,6 +9,10 @@ services:
       - a-net
     depends_on:
       - "db"
+    environment:
+      - SERVER_URI=http://localhost:8080/
+      - DB_HANDLER_URI=http://db:9999/v1/
+      
   management:
     build: Management-Service
 
@@ -18,11 +22,16 @@ services:
       - a-net
     depends_on:
       - "db"
+    environment:
+      - SERVER_URI=http://localhost:8090/
+      - DB_HANDLER_URI=http://db:9999/v1/
 
   db:
     build: DB-Handler
     networks:
       - a-net
+    environment:
+      - SERVER_URI=http://localhost:9999/v1
 
 networks:
   a-net:

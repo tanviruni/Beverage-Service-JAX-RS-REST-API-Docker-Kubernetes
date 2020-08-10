@@ -40,7 +40,6 @@ public class BeverageServiceBackend {
                 .request(MediaType.APPLICATION_JSON)
                 .get();
 
-
         if (response.getStatus() == 200) {
             return response.readEntity(new GenericType<List<BottleDTO>>() {
             })

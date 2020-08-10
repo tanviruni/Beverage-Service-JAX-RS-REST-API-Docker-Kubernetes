@@ -14,30 +14,30 @@ import java.util.List;
 @XmlRootElement(name = "beverages")
 @XmlType(propOrder = {"bottles", "crates"})
 public class BeveragesDTO {
-    private List<Bottle> bottles;
-    private List<Crate> crates;
+    private List<BottleDTO> bottles;
+    private List<CrateDTO> crates;
 
-    public List<Bottle> getBottles() {
+    public List<BottleDTO> getBottles() {
         return bottles;
     }
 
-    public void setBottles(List<Bottle> bottles) {
+    public void setBottles(List<BottleDTO> bottles) {
         this.bottles = bottles;
     }
 
-    public List<Crate> getCrates() {
+    public List<CrateDTO> getCrates() {
         return crates;
     }
 
-    public void setCrates(List<Crate> crates) {
+    public void setCrates(List<CrateDTO> crates) {
         this.crates = crates;
     }
 
     public BeveragesDTO() {}
 
     public BeveragesDTO(List<Bottle> bottles, List<Crate> crates) {
-        this.bottles = bottles;
-        this.crates = crates;
+        this.bottles = BottleDTO.marshall(bottles, null);
+        this.crates = CrateDTO.marshall(crates, null);
     }
 
 

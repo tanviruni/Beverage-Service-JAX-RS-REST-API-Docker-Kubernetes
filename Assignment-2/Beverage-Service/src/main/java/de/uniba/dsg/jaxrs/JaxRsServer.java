@@ -11,17 +11,15 @@ import java.net.URI;
 import java.util.Properties;
 
 public class JaxRsServer {
-    private static Properties properties = Configuration.loadProperties();
 
     public static void main(String[] args) throws IOException {
-        String serverUri = properties.getProperty("serverUri");
+        String serverUri = Configuration.getServerUri();
 
         URI baseUri = UriBuilder.fromUri(serverUri).build();
         ResourceConfig config = ResourceConfig.forApplicationClass(ExamplesApi.class);
         HttpServer server = JdkHttpServerFactory.createHttpServer(baseUri, config);
         System.out.println("Beverage-Service server ready to serve your JAX-RS requests...");
-        System.out.println("Press any key to exit...");
-        System.in.read();
+
 
 
     }
