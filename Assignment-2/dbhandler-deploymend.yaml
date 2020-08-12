@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: db
-          image: assignment-2_db_handler
+          image: assignment-2_db
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 9999

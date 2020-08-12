@@ -19,8 +19,8 @@ spec:
           image: assignment-2_management
           imagePullPolicy: IfNotPresent
           env:
-            - name: DB_ENV
-              value: http://dbhandler:9999/
+            - name: DB_HANDLER_URI
+              value: http://dbhandler:9999/v1/
             - name: SERVER_URI
               value: http://localhost:8090/
           ports:
